@@ -93,7 +93,7 @@ function HeroSection() {
           <DonateDialog>
             <Button
               size="lg"
-              className="rounded-full px-7 py-5 text-sm sm:text-base font-semibold bg-amber-500 hover:bg-amber-400 text-black glow-amber transition-all duration-300 hover:scale-105"
+              className="rounded-full px-7 py-5 text-sm sm:text-base font-semibold bg-white hover:bg-white/90 text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300 hover:scale-105"
             >
               <Bitcoin className="w-5 h-5 mr-2" />
               Support with Bitcoin
@@ -101,9 +101,8 @@ function HeroSection() {
           </DonateDialog>
           <Button
             asChild
-            variant="outline"
             size="lg"
-            className="rounded-full px-7 py-5 text-sm sm:text-base font-semibold border-amber-500/30 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/50 transition-all duration-300"
+            className="rounded-full px-7 py-5 text-sm sm:text-base font-semibold bg-amber-500 hover:bg-amber-400 text-black glow-amber transition-all duration-300 hover:scale-105"
           >
             <a href={LINKS.podcast} target="_blank" rel="noopener noreferrer">
               <Podcast className="w-5 h-5 mr-2" />
@@ -148,12 +147,6 @@ function HeroSection() {
 function QuickLinksSection() {
   const links = [
     {
-      label: 'Nostr Live Stream',
-      href: LINKS.stream,
-      icon: Tv,
-      accent: true,
-    },
-    {
       label: 'Nostr Feed',
       href: LINKS.nostrFeed,
       icon: Radio,
@@ -188,10 +181,8 @@ function QuickLinksSection() {
             key={link.label}
             asChild
             size="lg"
-            variant={link.accent ? 'default' : 'outline'}
-            className={link.accent
-              ? 'w-full sm:w-[208px] rounded-full px-7 py-5 text-sm sm:text-base font-semibold bg-amber-500 hover:bg-amber-400 text-black glow-amber transition-all duration-300 hover:scale-105'
-              : 'w-full sm:w-[208px] rounded-full px-7 py-5 text-sm sm:text-base font-semibold border-amber-500/30 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/50 transition-all duration-300'}
+            variant="outline"
+            className="w-full sm:w-[208px] rounded-full px-7 py-5 text-sm sm:text-base font-semibold border-amber-500/30 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/50 transition-all duration-300"
           >
             <a href={link.href} target="_blank" rel="noopener noreferrer">
               <link.icon className="w-5 h-5 mr-2" />
