@@ -17,11 +17,13 @@ const EXCLUDED_PUBKEYS = new Set([
 ]);
 
 function getZapSender(event: NostrEvent): string | null {
+  // Extract Sender Pubkey: Look for the uppercase P tag
   const bigPTag = event.tags.find(([name]) => name === 'P')?.[1];
   if (bigPTag && /^[0-9a-f]{64}$/.test(bigPTag)) {
     return bigPTag;
   }
 
+  // Fallback: JSON.parse the description tag, and extract .pubkey
   const descriptionTag = event.tags.find(([name]) => name === 'description')?.[1];
   if (descriptionTag) {
     try {
@@ -38,6 +40,8 @@ function getZapSender(event: NostrEvent): string | null {
 }
 
 function getZapAmount(event: NostrEvent): number | null {
+  // Extract Sats Amount:
+  // Look for the amount tag (in millisats) and convert to sats.
   const amountTag = event.tags.find(([name]) => name === 'amount')?.[1];
   if (amountTag) {
     const msats = Number.parseInt(amountTag, 10);
@@ -46,11 +50,13 @@ function getZapAmount(event: NostrEvent): number | null {
     }
   }
 
+  // Fallback 1: Parse the bolt11 tag string using regex match and multiply properly
   const bolt11 = event.tags.find(([name]) => name === 'bolt11')?.[1];
   if (bolt11) {
     return parseBolt11Amount(bolt11);
   }
 
+  // Fallback 2: JSON.parse the description tag and find the amount tag within it
   const descriptionTag = event.tags.find(([name]) => name === 'description')?.[1];
   if (descriptionTag) {
     try {

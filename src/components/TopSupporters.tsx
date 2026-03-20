@@ -8,14 +8,18 @@ import { Zap } from 'lucide-react';
 import { nip19 } from 'nostr-tools';
 import { cn } from '@/lib/utils';
 
-const EXTRA_PROFILE_RELAYS = [
-  'wss://relay.primal.net',
+const PRIMARY_PROFILE_RELAYS = [
   'wss://relay.damus.io',
+  'wss://relay.primal.net',
   'wss://relay.ditto.pub',
-  'wss://antiprimal.net',
+];
+
+const FALLBACK_PROFILE_RELAYS = [
   'wss://purplepag.es',
   'wss://relay.nostr.band',
+  'wss://antiprimal.net',
 ];
+
 const DEFAULT_AVATAR = 'https://blossom.ditto.pub/62ead074d0d5a7d1b707b101f7d0db62af97bd66843f4f28c7a1d9007e1e6960.jpeg';
 
 function useSupporterProfile(pubkey: string) {
@@ -24,7 +28,9 @@ function useSupporterProfile(pubkey: string) {
   return useQuery<{ metadata?: NostrMetadata }>({
     queryKey: ['supporter-profile', pubkey],
     queryFn: async () => {
-      const [event] = await nostr.query(
+      // 1. Query the primary user relays first
+      const primaryGroup = nostr.group(PRIMARY_PROFILE_RELAYS);
+      const [event] = await primaryGroup.query(
         [{ kinds: [0], authors: [pubkey], limit: 1 }],
         { signal: AbortSignal.timeout(3000) },
       );
@@ -38,7 +44,8 @@ function useSupporterProfile(pubkey: string) {
         }
       }
 
-      const extraGroup = nostr.group(EXTRA_PROFILE_RELAYS);
+      // 2. Fallback to directory relays if no profile is found
+      const extraGroup = nostr.group(FALLBACK_PROFILE_RELAYS);
       try {
         const [extra] = await extraGroup.query(
           [{ kinds: [0], authors: [pubkey], limit: 1 }],
