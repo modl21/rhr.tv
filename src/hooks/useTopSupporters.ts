@@ -118,7 +118,12 @@ function aggregateZapSupporters(events: NostrEvent[]): Supporter[] {
     .sort((a, b) => b.totalSats - a.totalSats);
 }
 
-const EXTRA_ZAP_RELAYS = ['wss://antiprimal.net'];
+const EXTRA_ZAP_RELAYS = [
+  'wss://relay.primal.net',
+  'wss://relay.damus.io',
+  'wss://relay.ditto.pub',
+  'wss://antiprimal.net',
+];
 
 export function useTopSupporters(limit: number = 10) {
   const { nostr } = useNostr();
