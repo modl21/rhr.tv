@@ -136,7 +136,7 @@ export function useTopSupporters(limit: number = 10) {
         {
           kinds: [9735],
           '#p': [RHR_PUBKEY],
-          limit: 1000,
+          limit: 10000,
         },
       ]);
 
