@@ -25,7 +25,7 @@ const LINKS = {
   stream: 'https://rhr.tv/stream',
   twitch: 'https://www.twitch.tv/rabbitholerecap',
   youtube: 'https://www.youtube.com/@TFTC/',
-  logo: 'https://rhr.tv/rhrb.webp',
+  logo: '/rhrb.webp',
 };
 
 function HeroSection() {
@@ -59,7 +59,7 @@ function HeroSection() {
             <img
               src={LINKS.logo}
               alt="Rabbit Hole Recap"
-              className="relative w-40 h-40 sm:w-52 sm:h-52 rounded-2xl object-cover border border-amber-500/20 shadow-2xl"
+              className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-2xl object-cover border border-amber-500/20 shadow-2xl"
             />
           </div>
         </div>
@@ -77,9 +77,9 @@ function HeroSection() {
 
         {/* Audience funded badge replaced with weeks badge */}
         <div className="flex items-center justify-center gap-2 mb-4 animate-fade-in-up animation-delay-300">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-black text-sm font-medium">
             <Radio className="w-4 h-4" />
-            <span>Over 375 weeks in a row</span>
+            <span className="lowercase">over 375 weeks in a row</span>
           </div>
         </div>
 
@@ -246,9 +246,6 @@ function Footer() {
             </a>
             <a href={LINKS.nostrFeed} target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">
               Nostr
-            </a>
-            <a href={LINKS.stream} target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">
-              Live
             </a>
             <DonateDialog className="inline">
               <button className="hover:text-amber-400 transition-colors cursor-pointer">
