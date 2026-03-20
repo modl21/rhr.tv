@@ -131,20 +131,6 @@ export function useTopSupporters(limit: number = 10) {
   return useQuery<Supporter[]>({
     queryKey: ['top-supporters', RHR_PUBKEY],
     queryFn: async () => {
-      // 1. Try to fetch from server-side cache (Worker API)
-      try {
-        const response = await fetch('/api/top-supporters');
-        if (response.ok) {
-          const cachedSupporters: Supporter[] = await response.json();
-          if (cachedSupporters.length > 0) {
-            return cachedSupporters.slice(0, limit);
-          }
-        }
-      } catch (workerError) {
-        console.warn('Worker cache fetch failed, falling back to direct Nostr query:', workerError);
-      }
-
-      // 2. Fallback to direct Nostr query (Client-side aggregation)
       const zapGroup = nostr.group(EXTRA_ZAP_RELAYS);
       const events = await zapGroup.query([
         {
