@@ -75,11 +75,11 @@ function HeroSection() {
           Bitcoin and Freedom Tech with ODELL and Marty Bent
         </p>
 
-        {/* Audience funded badge */}
+        {/* Audience funded badge replaced with weeks badge */}
         <div className="flex items-center justify-center gap-2 mb-4 animate-fade-in-up animation-delay-300">
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium">
-            <Shield className="w-4 h-4" />
-            <span>Audience Funded &mdash; No Ads, No Paywalls</span>
+            <Radio className="w-4 h-4" />
+            <span>Over 375 weeks in a row</span>
           </div>
         </div>
 
@@ -161,16 +161,6 @@ function QuickLinksSection() {
       href: LINKS.youtube,
       icon: Video,
     },
-    {
-      label: 'ODELL on Nostr',
-      href: LINKS.odellNostr,
-      icon: MessageCircle,
-    },
-    {
-      label: 'Marty on Nostr',
-      href: LINKS.martyNostr,
-      icon: MessageCircle,
-    },
   ];
 
   return (
@@ -182,7 +172,7 @@ function QuickLinksSection() {
             asChild
             size="lg"
             variant="outline"
-            className="w-full sm:w-[208px] rounded-full px-7 py-5 text-sm sm:text-base font-semibold border-amber-500/30 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/50 transition-all duration-300"
+            className="w-full sm:w-[208px] rounded-full px-7 py-5 text-sm sm:text-base font-semibold border-[#FFD700] text-black bg-[#FFD700] hover:bg-[#FFD700]/90 transition-all duration-300 shadow-[0_0_15px_rgba(255,215,0,0.2)]"
           >
             <a href={link.href} target="_blank" rel="noopener noreferrer">
               <link.icon className="w-5 h-5 mr-2" />
@@ -302,7 +292,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
       <HeroSection />
-      <DonateSection />
       <Footer />
     </div>
   );
