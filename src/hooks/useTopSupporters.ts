@@ -17,13 +17,8 @@ const EXCLUDED_PUBKEYS = new Set([
 ]);
 
 function getZapSender(event: NostrEvent): string | null {
-  // Extract Sender Pubkey: Look for the uppercase P tag
-  const bigPTag = event.tags.find(([name]) => name === 'P')?.[1];
-  if (bigPTag && /^[0-9a-f]{64}$/.test(bigPTag)) {
-    return bigPTag;
-  }
-
-  // Fallback: JSON.parse the description tag, and extract .pubkey
+  // Try to parse the inner zap request first as it's the most reliable 
+  // indicator of the *intended* sender (who signed the zap request)
   const descriptionTag = event.tags.find(([name]) => name === 'description')?.[1];
   if (descriptionTag) {
     try {
@@ -34,6 +29,15 @@ function getZapSender(event: NostrEvent): string | null {
     } catch {
       // Invalid JSON
     }
+  }
+
+  // Fallback: Look for the uppercase P tag on the receipt itself
+  // (Note: Some zappers put the sender in 'P' and recipient in 'p', 
+  // but NIP-57 says 'P' is the pubkey of the provider... however 
+  // in practice many clients use 'P' for the sender if no description exists)
+  const bigPTag = event.tags.find(([name]) => name === 'P')?.[1];
+  if (bigPTag && /^[0-9a-f]{64}$/.test(bigPTag)) {
+    return bigPTag;
   }
 
   return null;
@@ -101,12 +105,15 @@ function aggregateZapSupporters(events: NostrEvent[]): Supporter[] {
   for (const event of events) {
     if (event.kind !== 9735) continue;
 
+    const sats = getZapAmount(event);
+    if (!sats || sats <= 0) continue;
+
+    // A recipient could be zapping themselves, or zapping anonymously. 
+    // If the sender cannot be identified via 'P' tag or description 
+    // it was an anonymous zap - ignore it for the leaderboard.
     const sender = getZapSender(event);
     if (!sender) continue;
     if (EXCLUDED_PUBKEYS.has(sender)) continue;
-
-    const sats = getZapAmount(event);
-    if (!sats || sats <= 0) continue;
 
     const existing = map.get(sender);
     if (existing) {
