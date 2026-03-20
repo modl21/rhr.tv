@@ -118,13 +118,16 @@ function aggregateZapSupporters(events: NostrEvent[]): Supporter[] {
     .sort((a, b) => b.totalSats - a.totalSats);
 }
 
+const EXTRA_ZAP_RELAYS = ['wss://antiprimal.net'];
+
 export function useTopSupporters(limit: number = 10) {
   const { nostr } = useNostr();
 
   return useQuery<Supporter[]>({
     queryKey: ['top-supporters', RHR_PUBKEY],
     queryFn: async () => {
-      const events = await nostr.query([
+      const zapGroup = nostr.group(EXTRA_ZAP_RELAYS);
+      const events = await zapGroup.query([
         {
           kinds: [9735],
           '#p': [RHR_PUBKEY],
