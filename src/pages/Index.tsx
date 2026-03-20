@@ -93,7 +93,7 @@ function HeroSection() {
           <DonateDialog>
             <Button
               size="lg"
-              className="rounded-full px-7 py-5 text-sm sm:text-base font-semibold bg-white hover:bg-white/90 text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300 hover:scale-105"
+              className="rounded-full px-7 py-5 text-sm sm:text-base font-semibold bg-[#FFD700] hover:bg-[#FFD700]/90 text-black shadow-[0_0_20px_rgba(255,215,0,0.3)] transition-all duration-300 hover:scale-105"
             >
               <Bitcoin className="w-5 h-5 mr-2" />
               Support with Bitcoin
@@ -221,7 +221,7 @@ function DonateSection() {
             <DonateDialog>
               <Button
                 size="lg"
-                className="rounded-full px-8 py-5 text-sm sm:text-base font-semibold bg-amber-500 hover:bg-amber-400 text-black glow-amber-strong transition-all duration-300 hover:scale-105 animate-pulse-glow"
+                className="rounded-full px-8 py-5 text-sm sm:text-base font-semibold bg-[#FFD700] hover:bg-[#FFD700]/90 text-black shadow-[0_0_20px_rgba(255,215,0,0.4)] transition-all duration-300 hover:scale-105 animate-pulse-glow"
               >
                 <Bitcoin className="w-5 h-5 mr-2" />
                 Donate Bitcoin
