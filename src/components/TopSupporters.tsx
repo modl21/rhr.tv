@@ -13,6 +13,8 @@ const EXTRA_PROFILE_RELAYS = [
   'wss://relay.damus.io',
   'wss://relay.ditto.pub',
   'wss://antiprimal.net',
+  'wss://purplepag.es',
+  'wss://relay.nostr.band',
 ];
 const DEFAULT_AVATAR = 'https://blossom.ditto.pub/62ead074d0d5a7d1b707b101f7d0db62af97bd66843f4f28c7a1d9007e1e6960.jpeg';
 
