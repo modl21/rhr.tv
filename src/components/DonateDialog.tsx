@@ -36,6 +36,24 @@ import QRCode from 'qrcode';
 const LIGHTNING_ADDRESS = 'rhr@primal.net';
 const RECIPIENT_PUBKEY = 'f81611363554b64306467234d7396ec88455707633f54738f6c4683535098cd3';
 
+async function resolveNip05(nip05: string): Promise<string> {
+  const trimmed = nip05.trim().toLowerCase();
+  const [name, domain] = trimmed.includes('@') ? trimmed.split('@') : ['_', trimmed];
+  if (!name || !domain) throw new Error('Invalid Nostr address format');
+
+  const url = `https://${domain}/.well-known/nostr.json?name=${encodeURIComponent(name)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to resolve ${nip05}: HTTP ${res.status}`);
+
+  const data = await res.json();
+  const pubkey = data?.names?.[name];
+  if (!pubkey || !/^[0-9a-f]{64}$/.test(pubkey)) {
+    throw new Error(`No pubkey found for ${nip05}`);
+  }
+
+  return pubkey;
+}
+
 const presetAmounts = [
   { amount: 1000, label: '1k', icon: Sparkle },
   { amount: 5000, label: '5k', icon: Sparkles },
@@ -108,7 +126,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | string>(10000);
   const [memo, setMemo] = useState('');
-  const [supporterNpub, setSupporterNpub] = useState('');
+  const [supporterNip05, setSupporterNip05] = useState('');
   const [invoice, setInvoice] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -166,7 +184,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
     if (!open) {
       setAmount(10000);
       setMemo('');
-      setSupporterNpub('');
+      setSupporterNip05('');
       setInvoice(null);
       setCopied(false);
       setQrCodeUrl('');
@@ -227,21 +245,16 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
       if (lnurlParams?.allowsNostr && lnurlParams.nostrPubkey) {
         let senderPubkey = user?.pubkey;
 
-        if (!senderPubkey && supporterNpub.trim()) {
+        if (!senderPubkey && supporterNip05.trim()) {
           try {
-            const decoded = nip19.decode(supporterNpub.trim());
-            if (decoded.type === 'npub') {
-              senderPubkey = decoded.data;
-            } else {
-              throw new Error('Please enter a valid npub');
-            }
-          } catch {
-            throw new Error('Invalid npub format');
+            senderPubkey = await resolveNip05(supporterNip05.trim());
+          } catch (e) {
+            throw new Error((e as Error).message || 'Could not resolve Nostr address');
           }
         }
 
         if (!senderPubkey) {
-          throw new Error('Log in or enter your npub to be shown in Top Supporters');
+          throw new Error('Log in or enter your Nostr address to be shown in Top Supporters');
         }
 
         const relays = config.relayMetadata.relays.map((r) => r.url);
@@ -486,16 +499,16 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
               />
             </div>
 
-            {/* Supporter npub */}
+            {/* Supporter Nostr address */}
             <div className="space-y-2">
-              <Label htmlFor="supporter-npub" className="text-xs text-muted-foreground">
-                Your npub (optional, to show in Top Supporters)
+              <Label htmlFor="supporter-nip05" className="text-xs text-muted-foreground">
+                Your Nostr address (optional, to show in Top Supporters)
               </Label>
               <Input
-                id="supporter-npub"
-                placeholder="npub1..."
-                value={supporterNpub}
-                onChange={(e) => setSupporterNpub(e.target.value)}
+                id="supporter-nip05"
+                placeholder="you@example.com"
+                value={supporterNip05}
+                onChange={(e) => setSupporterNip05(e.target.value)}
                 className="border-amber-500/10 focus:border-amber-500/30 text-xs"
               />
             </div>
