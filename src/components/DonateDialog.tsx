@@ -127,6 +127,9 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
   const [amount, setAmount] = useState<number | string>(10000);
   const [memo, setMemo] = useState('');
   const [supporterNip05, setSupporterNip05] = useState('');
+  const [resolvedPubkey, setResolvedPubkey] = useState<string | null>(null);
+  const [nip05Status, setNip05Status] = useState<'idle' | 'resolving' | 'valid' | 'invalid'>('idle');
+  const nip05TimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [invoice, setInvoice] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -179,12 +182,52 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
     };
   }, [invoice]);
 
+  // Debounced NIP-05 validation as user types
+  useEffect(() => {
+    if (nip05TimerRef.current) clearTimeout(nip05TimerRef.current);
+
+    const trimmed = supporterNip05.trim();
+    if (!trimmed) {
+      setNip05Status('idle');
+      setResolvedPubkey(null);
+      return;
+    }
+
+    // Basic format check before attempting resolution
+    const hasValidFormat = trimmed.includes('@') || trimmed.includes('.');
+    if (!hasValidFormat) {
+      setNip05Status('invalid');
+      setResolvedPubkey(null);
+      return;
+    }
+
+    setNip05Status('resolving');
+
+    nip05TimerRef.current = setTimeout(() => {
+      resolveNip05(trimmed)
+        .then((pubkey) => {
+          setResolvedPubkey(pubkey);
+          setNip05Status('valid');
+        })
+        .catch(() => {
+          setResolvedPubkey(null);
+          setNip05Status('invalid');
+        });
+    }, 600);
+
+    return () => {
+      if (nip05TimerRef.current) clearTimeout(nip05TimerRef.current);
+    };
+  }, [supporterNip05]);
+
   // Reset state when dialog closes
   useEffect(() => {
     if (!open) {
       setAmount(10000);
       setMemo('');
       setSupporterNip05('');
+      setResolvedPubkey(null);
+      setNip05Status('idle');
       setInvoice(null);
       setCopied(false);
       setQrCodeUrl('');
@@ -245,7 +288,9 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
       if (lnurlParams?.allowsNostr && lnurlParams.nostrPubkey) {
         let senderPubkey = user?.pubkey;
 
-        if (!senderPubkey && supporterNip05.trim()) {
+        if (!senderPubkey && resolvedPubkey) {
+          senderPubkey = resolvedPubkey;
+        } else if (!senderPubkey && supporterNip05.trim()) {
           try {
             senderPubkey = await resolveNip05(supporterNip05.trim());
           } catch (e) {
@@ -504,13 +549,35 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
               <Label htmlFor="supporter-nip05" className="text-xs text-muted-foreground">
                 Your Nostr address (optional, to show in Top Supporters)
               </Label>
-              <Input
-                id="supporter-nip05"
-                placeholder="you@example.com"
-                value={supporterNip05}
-                onChange={(e) => setSupporterNip05(e.target.value)}
-                className="border-amber-500/10 focus:border-amber-500/30 text-xs"
-              />
+              <div className="relative">
+                <Input
+                  id="supporter-nip05"
+                  placeholder="you@example.com"
+                  value={supporterNip05}
+                  onChange={(e) => setSupporterNip05(e.target.value)}
+                  className={`border-amber-500/10 focus:border-amber-500/30 text-xs pr-8 ${
+                    nip05Status === 'valid' ? 'border-green-500/50' :
+                    nip05Status === 'invalid' ? 'border-red-500/50' : ''
+                  }`}
+                />
+                <div className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                  {nip05Status === 'resolving' && (
+                    <Loader2 className="h-3.5 w-3.5 text-muted-foreground animate-spin" />
+                  )}
+                  {nip05Status === 'valid' && (
+                    <Check className="h-3.5 w-3.5 text-green-500" />
+                  )}
+                  {nip05Status === 'invalid' && (
+                    <span className="text-red-500 text-xs font-medium">✕</span>
+                  )}
+                </div>
+              </div>
+              {nip05Status === 'invalid' && supporterNip05.trim() && (
+                <p className="text-[11px] text-red-400">Could not resolve this Nostr address.</p>
+              )}
+              {nip05Status === 'valid' && (
+                <p className="text-[11px] text-green-400">Nostr address verified!</p>
+              )}
             </div>
 
             {/* Generate invoice button */}
