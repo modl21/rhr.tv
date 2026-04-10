@@ -32,7 +32,15 @@ interface Bet {
   deadlineDate: Date;
   status: 'active' | 'settled';
   winner?: 'ODELL' | 'Marty';
+  /** Sats collected by the winner (for settled bets) */
+  satsWon?: number;
   icon: typeof Flame;
+}
+
+function formatSats(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1)}M`;
+  if (n >= 1_000) return `${Math.round(n / 1_000)}k`;
+  return n.toString();
 }
 
 const BETS: Bet[] = [
@@ -79,6 +87,7 @@ const BETS: Bet[] = [
     deadlineDate: new Date('2024-04-20'),
     status: 'settled',
     winner: 'Marty',
+    satsWon: 1_000_000,
     icon: HardDrive,
   },
   {
@@ -94,6 +103,7 @@ const BETS: Bet[] = [
     deadlineDate: new Date('2025-12-31'),
     status: 'settled',
     winner: 'ODELL',
+    satsWon: 100_000,
     icon: Landmark,
   },
   {
@@ -109,6 +119,7 @@ const BETS: Bet[] = [
     deadlineDate: new Date('2025-07-16'),
     status: 'settled',
     winner: 'ODELL',
+    satsWon: 200_000,
     icon: ShieldCheck,
   },
   {
@@ -124,6 +135,7 @@ const BETS: Bet[] = [
     deadlineDate: new Date('2025-06-15'),
     status: 'settled',
     winner: 'ODELL',
+    satsWon: 200_000,
     icon: ScrollText,
   },
   {
@@ -139,6 +151,7 @@ const BETS: Bet[] = [
     deadlineDate: new Date('2024-11-05'),
     status: 'settled',
     winner: 'ODELL',
+    satsWon: 100_000,
     icon: Vote,
   },
 ];
@@ -322,6 +335,8 @@ export function BetTracker() {
 
   const odellWins = settledBets.filter((b) => b.winner === 'ODELL').length;
   const martyWins = settledBets.filter((b) => b.winner === 'Marty').length;
+  const odellSatsWon = settledBets.filter((b) => b.winner === 'ODELL').reduce((sum, b) => sum + (b.satsWon ?? 0), 0);
+  const martySatsWon = settledBets.filter((b) => b.winner === 'Marty').reduce((sum, b) => sum + (b.satsWon ?? 0), 0);
 
   return (
     <section className="relative py-10 sm:py-14 px-6">
@@ -343,6 +358,35 @@ export function BetTracker() {
           <p className="text-sm text-muted-foreground max-w-md mx-auto">
             Active bets between the hosts — settled on air, paid in sats.
           </p>
+        </div>
+
+        {/* Performance scoreboard */}
+        <div className="mb-6 sm:mb-8">
+          <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+            {/* ODELL stats */}
+            <div className="relative rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-center overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
+              <p className="text-xs text-muted-foreground/60 mb-1 uppercase tracking-wider font-medium">ODELL</p>
+              <p className="text-2xl sm:text-3xl font-black text-amber-400 leading-none mb-1">
+                {odellWins}<span className="text-base sm:text-lg font-bold text-amber-400/60">W</span>
+              </p>
+              <p className="text-xs text-muted-foreground/50">
+                <Zap className="w-3 h-3 inline -mt-0.5 text-amber-400/50" /> {formatSats(odellSatsWon)} won
+              </p>
+            </div>
+
+            {/* Marty stats */}
+            <div className="relative rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-center overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
+              <p className="text-xs text-muted-foreground/60 mb-1 uppercase tracking-wider font-medium">Marty</p>
+              <p className="text-2xl sm:text-3xl font-black text-emerald-400 leading-none mb-1">
+                {martyWins}<span className="text-base sm:text-lg font-bold text-emerald-400/60">W</span>
+              </p>
+              <p className="text-xs text-muted-foreground/50">
+                <Zap className="w-3 h-3 inline -mt-0.5 text-emerald-400/50" /> {formatSats(martySatsWon)} won
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Active bet cards */}
