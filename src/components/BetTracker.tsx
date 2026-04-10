@@ -115,12 +115,12 @@ const BETS: Bet[] = [
     against: 'ODELL',
     amount: '200,000 sats',
     odds: '2:1',
-    oddsExplainer: 'ODELL won 200k sats',
+    oddsExplainer: 'ODELL won 400k sats (2:1 odds)',
     deadline: 'July 16, 2025',
     deadlineDate: new Date('2025-07-16'),
     status: 'settled',
     winner: 'ODELL',
-    satsWon: 200_000,
+    satsWon: 400_000,
     icon: ShieldCheck,
   },
   {
@@ -297,7 +297,7 @@ function SettledBetCard({ bet }: { bet: Bet }) {
           {/* Content */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
-              <h3 className="font-semibold text-xs sm:text-sm text-foreground/80 leading-tight truncate">
+              <h3 className="font-semibold text-xs sm:text-sm text-foreground/80 leading-tight">
                 {bet.title}
               </h3>
               <Badge
@@ -307,7 +307,7 @@ function SettledBetCard({ bet }: { bet: Bet }) {
                 {bet.amount}
               </Badge>
             </div>
-            <p className="text-[11px] sm:text-xs text-muted-foreground/50 leading-snug truncate">
+            <p className="text-[11px] sm:text-xs text-muted-foreground/50 leading-snug">
               {bet.description}
             </p>
           </div>
