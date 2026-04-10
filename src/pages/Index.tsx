@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { DonateDialog } from '@/components/DonateDialog';
 import { TopSupporters } from '@/components/TopSupporters';
+import { BetTracker } from '@/components/BetTracker';
 
 const LINKS = {
   podcast: 'https://www.fountain.fm/show/VDaMppQRUBZioj2XkaLn',
@@ -289,6 +290,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
       <HeroSection />
+      <BetTracker />
       <Footer />
     </div>
   );
