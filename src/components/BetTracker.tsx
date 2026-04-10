@@ -368,7 +368,7 @@ export function BetTracker() {
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
               <p className="text-xs text-muted-foreground/60 mb-1 uppercase tracking-wider font-medium">ODELL</p>
               <p className="text-2xl sm:text-3xl font-black text-amber-400 leading-none mb-1">
-                {odellWins}<span className="text-base sm:text-lg font-bold text-amber-400/60">W</span>
+                {odellWins} <span className="text-base sm:text-lg font-bold text-amber-400/60">wins</span>
               </p>
               <p className="text-xs text-muted-foreground/50">
                 <Zap className="w-3 h-3 inline -mt-0.5 text-amber-400/50" /> {formatSats(odellSatsWon)} won
@@ -380,7 +380,7 @@ export function BetTracker() {
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
               <p className="text-xs text-muted-foreground/60 mb-1 uppercase tracking-wider font-medium">Marty</p>
               <p className="text-2xl sm:text-3xl font-black text-emerald-400 leading-none mb-1">
-                {martyWins}<span className="text-base sm:text-lg font-bold text-emerald-400/60">W</span>
+                {martyWins} <span className="text-base sm:text-lg font-bold text-emerald-400/60">{martyWins === 1 ? 'win' : 'wins'}</span>
               </p>
               <p className="text-xs text-muted-foreground/50">
                 <Zap className="w-3 h-3 inline -mt-0.5 text-emerald-400/50" /> {formatSats(martySatsWon)} won
