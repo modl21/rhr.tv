@@ -76,11 +76,11 @@ function HeroSection() {
           Bitcoin and Freedom Tech with ODELL and Marty Bent
         </p>
 
-        {/* Audience funded badge replaced with weeks badge */}
+        {/* Weeks counter badge */}
         <div className="flex items-center justify-center gap-2 mb-4 animate-fade-in-up animation-delay-300">
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-black text-sm font-medium">
             <Radio className="w-4 h-4" />
-            <span className="lowercase">over 375 weeks in a row</span>
+            <span className="lowercase">{Math.floor((Date.now() - new Date('2018-08-27').getTime()) / (7 * 24 * 60 * 60 * 1000))} weeks in a row</span>
           </div>
         </div>
 
