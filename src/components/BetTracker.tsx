@@ -19,6 +19,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 
+
 interface Bet {
   id: string;
   title: string;
@@ -329,7 +330,6 @@ function SettledBetCard({ bet }: { bet: Bet }) {
 }
 
 export function BetTracker() {
-  const [showSettled, setShowSettled] = useState(false);
   const activeBets = BETS.filter((b) => b.status === 'active');
   const settledBets = BETS.filter((b) => b.status === 'settled');
 
@@ -408,42 +408,20 @@ export function BetTracker() {
 
         {/* Settled bets section */}
         <div className="mt-10">
-          <button
-            onClick={() => setShowSettled(!showSettled)}
-            className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground/80 transition-colors duration-200 group/toggle cursor-pointer"
-          >
+          <div className="flex items-center justify-center gap-2 mb-4 text-sm text-muted-foreground">
             <div className="h-px flex-1 max-w-[80px] bg-border/50" />
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/40 bg-card/30 hover:bg-card/60 transition-all duration-200">
+            <div className="flex items-center gap-1.5 px-3 py-1.5">
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span className="font-medium">Past Bets</span>
-              <span className="text-xs text-muted-foreground/50">({settledBets.length})</span>
-              {showSettled ? (
-                <ChevronUp className="w-3.5 h-3.5 text-muted-foreground/40" />
-              ) : (
-                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground/40" />
-              )}
             </div>
             <div className="h-px flex-1 max-w-[80px] bg-border/50" />
-          </button>
+          </div>
 
-          {showSettled && (
-            <div className="mt-4 space-y-2 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
-              {/* Record */}
-              <div className="flex items-center justify-center gap-4 mb-3 text-xs text-muted-foreground/60">
-                <span>
-                  ODELL: <span className="font-bold text-amber-400">{odellWins}W</span>
-                </span>
-                <span className="text-muted-foreground/20">|</span>
-                <span>
-                  Marty: <span className="font-bold text-emerald-400">{martyWins}W</span>
-                </span>
-              </div>
-
-              {settledBets.map((bet) => (
-                <SettledBetCard key={bet.id} bet={bet} />
-              ))}
-            </div>
-          )}
+          <div className="space-y-2">
+            {settledBets.map((bet) => (
+              <SettledBetCard key={bet.id} bet={bet} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
