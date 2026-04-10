@@ -37,22 +37,22 @@ const ACTIVE_BETS: Bet[] = [
     amount: '100,000 sats',
     odds: '2:1',
     oddsExplainer: 'Marty wins 200k if ceasefire happens, loses 100k if not',
-    deadline: 'April 21, 2025',
-    deadlineDate: new Date('2025-04-21'),
+    deadline: 'April 21, 2026 23:59 UTC',
+    deadlineDate: new Date('2026-04-21T23:59:00Z'),
     status: 'active',
     icon: Target,
   },
   {
     id: 'btc-ath-gold-silver',
     title: 'BTC ATH in Gold & Silver',
-    description: 'Bitcoin hits new all-time highs priced in gold and silver by 2027',
+    description: 'Bitcoin hits new all-time highs priced in gold and silver by end of 2026',
     proposedBy: 'ODELL',
     against: 'Marty',
     amount: '100,000 sats',
     odds: '2:1',
     oddsExplainer: 'ODELL wins 200k if BTC hits ATH in both, loses 100k if not',
-    deadline: 'End of 2027',
-    deadlineDate: new Date('2027-12-31'),
+    deadline: 'December 31, 2026 23:59 UTC',
+    deadlineDate: new Date('2026-12-31T23:59:00Z'),
     status: 'active',
     icon: TrendingUp,
   },
@@ -212,22 +212,8 @@ export function BetTracker() {
           ))}
         </div>
 
-        {/* Score tally */}
-        <div className="mt-6 flex items-center justify-center gap-6">
-          <div className="flex items-center gap-2 text-sm">
-            <div className="w-2 h-2 rounded-full bg-amber-400" />
-            <span className="text-muted-foreground">
-              <span className="font-bold text-foreground">{activeBets.filter(b => b.proposedBy === 'ODELL').length}</span> by ODELL
-            </span>
-          </div>
-          <div className="w-px h-4 bg-border" />
-          <div className="flex items-center gap-2 text-sm">
-            <div className="w-2 h-2 rounded-full bg-amber-400" />
-            <span className="text-muted-foreground">
-              <span className="font-bold text-foreground">{activeBets.filter(b => b.proposedBy === 'Marty').length}</span> by Marty
-            </span>
-          </div>
-          <div className="w-px h-4 bg-border" />
+        {/* Total stake */}
+        <div className="mt-6 flex items-center justify-center">
           <div className="flex items-center gap-2 text-sm">
             <Zap className="w-3 h-3 text-amber-400" />
             <span className="text-muted-foreground">
