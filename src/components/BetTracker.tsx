@@ -115,7 +115,7 @@ const BETS: Bet[] = [
   {
     id: 'tether-hack',
     title: 'Tether Gets Hacked BTC Back',
-    description: 'Marty bets Tether gets their hacked bitcoin back by July 16',
+    description: 'Marty bets Tether gets their hacked bitcoin back by July 16, 2025',
     proposedBy: 'Marty',
     against: 'ODELL',
     amount: '200,000 sats',
@@ -147,8 +147,8 @@ const BETS: Bet[] = [
   },
   {
     id: 'election-cancelled',
-    title: 'Election Won\'t Happen',
-    description: 'Marty bets the election won\'t happen',
+    title: '2024 US Presidential Election Won\'t Happen',
+    description: 'Marty bets the 2024 US presidential election won\'t happen',
     proposedBy: 'Marty',
     against: 'ODELL',
     amount: '100,000 sats',
