@@ -10,6 +10,13 @@ import {
   ChevronDown,
   ChevronUp,
   Zap,
+  Trophy,
+  ScrollText,
+  Landmark,
+  ShieldCheck,
+  Vote,
+  HardDrive,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface Bet {
@@ -23,11 +30,13 @@ interface Bet {
   oddsExplainer: string;
   deadline: string;
   deadlineDate: Date;
-  status: 'active' | 'settled' | 'expired';
+  status: 'active' | 'settled';
+  winner?: 'ODELL' | 'Marty';
   icon: typeof Flame;
 }
 
-const ACTIVE_BETS: Bet[] = [
+const BETS: Bet[] = [
+  // ── Active bets ──
   {
     id: 'iran-ceasefire',
     title: 'Iran Ceasefire',
@@ -55,6 +64,82 @@ const ACTIVE_BETS: Bet[] = [
     deadlineDate: new Date('2026-12-31T23:59:00Z'),
     status: 'active',
     icon: TrendingUp,
+  },
+  // ── Settled bets ──
+  {
+    id: 'mempool-clear',
+    title: 'Mempools Clear Before Halving',
+    description: 'Marty bets mempools will clear before the next halving',
+    proposedBy: 'Marty',
+    against: 'ODELL',
+    amount: '1,000,000 sats',
+    odds: 'Even',
+    oddsExplainer: 'Marty won 1M sats',
+    deadline: 'Next halving',
+    deadlineDate: new Date('2024-04-20'),
+    status: 'settled',
+    winner: 'Marty',
+    icon: HardDrive,
+  },
+  {
+    id: 'bitbonds',
+    title: 'US Gov Issues BitBonds',
+    description: 'Marty bets the US government will issue BitBonds by end of 2025',
+    proposedBy: 'Marty',
+    against: 'ODELL',
+    amount: '100,000 sats',
+    odds: '2:1',
+    oddsExplainer: 'ODELL won 100k sats',
+    deadline: 'End of 2025',
+    deadlineDate: new Date('2025-12-31'),
+    status: 'settled',
+    winner: 'ODELL',
+    icon: Landmark,
+  },
+  {
+    id: 'tether-hack',
+    title: 'Tether Gets Hacked BTC Back',
+    description: 'Marty bets Tether gets their hacked bitcoin back by July 16',
+    proposedBy: 'Marty',
+    against: 'ODELL',
+    amount: '200,000 sats',
+    odds: '2:1',
+    oddsExplainer: 'ODELL won 200k sats',
+    deadline: 'July 16, 2025',
+    deadlineDate: new Date('2025-07-16'),
+    status: 'settled',
+    winner: 'ODELL',
+    icon: ShieldCheck,
+  },
+  {
+    id: 'sbr-bill',
+    title: 'Strategic Bitcoin Reserve Bill Signed',
+    description: 'Marty bets a strategic bitcoin reserve bill is signed by June 15, 2025',
+    proposedBy: 'Marty',
+    against: 'ODELL',
+    amount: '200,000 sats',
+    odds: 'Even',
+    oddsExplainer: 'ODELL won 200k sats',
+    deadline: 'June 15, 2025',
+    deadlineDate: new Date('2025-06-15'),
+    status: 'settled',
+    winner: 'ODELL',
+    icon: ScrollText,
+  },
+  {
+    id: 'election-cancelled',
+    title: 'Election Won\'t Happen',
+    description: 'Marty bets the election won\'t happen',
+    proposedBy: 'Marty',
+    against: 'ODELL',
+    amount: '100,000 sats',
+    odds: '10:1',
+    oddsExplainer: 'ODELL won 100k sats',
+    deadline: 'Election Day 2024',
+    deadlineDate: new Date('2024-11-05'),
+    status: 'settled',
+    winner: 'ODELL',
+    icon: Vote,
   },
 ];
 
@@ -87,7 +172,7 @@ function getUrgencyColor(deadline: Date): string {
   return 'text-emerald-400';
 }
 
-function BetCard({ bet }: { bet: Bet }) {
+function ActiveBetCard({ bet }: { bet: Bet }) {
   const [expanded, setExpanded] = useState(false);
   const Icon = bet.icon;
   const timeRemaining = getTimeRemaining(bet.deadlineDate);
@@ -180,8 +265,63 @@ function BetCard({ bet }: { bet: Bet }) {
   );
 }
 
+function SettledBetCard({ bet }: { bet: Bet }) {
+  const Icon = bet.icon;
+  const winnerIsOdell = bet.winner === 'ODELL';
+
+  return (
+    <Card className="group relative border-border/40 bg-card/20 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-border/60">
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex items-center gap-3">
+          {/* Icon */}
+          <div className="flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-muted/50 border border-border/30 flex items-center justify-center">
+              <Icon className="w-3.5 h-3.5 text-muted-foreground/60" />
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <h3 className="font-semibold text-xs sm:text-sm text-foreground/80 leading-tight truncate">
+                {bet.title}
+              </h3>
+              <Badge
+                variant="outline"
+                className="text-[9px] sm:text-[10px] border-muted-foreground/15 bg-muted/30 text-muted-foreground/60 font-medium px-1.5 py-0 flex-shrink-0"
+              >
+                {bet.amount}
+              </Badge>
+            </div>
+            <p className="text-[11px] sm:text-xs text-muted-foreground/50 leading-snug truncate">
+              {bet.description}
+            </p>
+          </div>
+
+          {/* Winner badge */}
+          <div className="flex-shrink-0">
+            <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold ${
+              winnerIsOdell
+                ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+            }`}>
+              <Trophy className="w-2.5 h-2.5" />
+              {bet.winner}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function BetTracker() {
-  const activeBets = ACTIVE_BETS.filter((b) => b.status === 'active');
+  const [showSettled, setShowSettled] = useState(false);
+  const activeBets = BETS.filter((b) => b.status === 'active');
+  const settledBets = BETS.filter((b) => b.status === 'settled');
+
+  const odellWins = settledBets.filter((b) => b.winner === 'ODELL').length;
+  const martyWins = settledBets.filter((b) => b.winner === 'Marty').length;
 
   return (
     <section className="relative py-10 sm:py-14 px-6">
@@ -205,10 +345,10 @@ export function BetTracker() {
           </p>
         </div>
 
-        {/* Bet cards */}
+        {/* Active bet cards */}
         <div className="space-y-3">
           {activeBets.map((bet) => (
-            <BetCard key={bet.id} bet={bet} />
+            <ActiveBetCard key={bet.id} bet={bet} />
           ))}
         </div>
 
@@ -220,6 +360,46 @@ export function BetTracker() {
               <span className="font-bold text-foreground">200k</span> sats at stake
             </span>
           </div>
+        </div>
+
+        {/* Settled bets section */}
+        <div className="mt-10">
+          <button
+            onClick={() => setShowSettled(!showSettled)}
+            className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground/80 transition-colors duration-200 group/toggle cursor-pointer"
+          >
+            <div className="h-px flex-1 max-w-[80px] bg-border/50" />
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/40 bg-card/30 hover:bg-card/60 transition-all duration-200">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span className="font-medium">Past Bets</span>
+              <span className="text-xs text-muted-foreground/50">({settledBets.length})</span>
+              {showSettled ? (
+                <ChevronUp className="w-3.5 h-3.5 text-muted-foreground/40" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground/40" />
+              )}
+            </div>
+            <div className="h-px flex-1 max-w-[80px] bg-border/50" />
+          </button>
+
+          {showSettled && (
+            <div className="mt-4 space-y-2 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
+              {/* Record */}
+              <div className="flex items-center justify-center gap-4 mb-3 text-xs text-muted-foreground/60">
+                <span>
+                  ODELL: <span className="font-bold text-amber-400">{odellWins}W</span>
+                </span>
+                <span className="text-muted-foreground/20">|</span>
+                <span>
+                  Marty: <span className="font-bold text-emerald-400">{martyWins}W</span>
+                </span>
+              </div>
+
+              {settledBets.map((bet) => (
+                <SettledBetCard key={bet.id} bet={bet} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
