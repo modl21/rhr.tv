@@ -28,6 +28,8 @@ interface Bet {
   against: 'ODELL' | 'Marty';
   amount: string;
   odds: string;
+  /** Who gets the favorable odds (null/undefined = even odds) */
+  oddsHolder?: 'ODELL' | 'Marty';
   oddsExplainer: string;
   deadline: string;
   deadlineDate: Date;
@@ -54,6 +56,7 @@ const BETS: Bet[] = [
     against: 'ODELL',
     amount: '100,000 sats',
     odds: '2:1',
+    oddsHolder: 'Marty',
     oddsExplainer: 'Marty wins 200k if ceasefire happens, loses 100k if not',
     deadline: 'April 21, 2026 23:59 UTC',
     deadlineDate: new Date('2026-04-21T23:59:00Z'),
@@ -68,6 +71,7 @@ const BETS: Bet[] = [
     against: 'Marty',
     amount: '100,000 sats',
     odds: '2:1',
+    oddsHolder: 'ODELL',
     oddsExplainer: 'ODELL wins 200k if BTC hits ATH in both, loses 100k if not',
     deadline: 'December 31, 2026 23:59 UTC',
     deadlineDate: new Date('2026-12-31T23:59:00Z'),
@@ -99,6 +103,7 @@ const BETS: Bet[] = [
     against: 'ODELL',
     amount: '100,000 sats',
     odds: '2:1',
+    oddsHolder: 'Marty',
     oddsExplainer: 'ODELL won 100k sats',
     deadline: 'End of 2025',
     deadlineDate: new Date('2025-12-31'),
@@ -115,6 +120,7 @@ const BETS: Bet[] = [
     against: 'ODELL',
     amount: '200,000 sats',
     odds: '2:1',
+    oddsHolder: 'ODELL',
     oddsExplainer: 'ODELL won 400k sats (2:1 odds)',
     deadline: 'July 16, 2025',
     deadlineDate: new Date('2025-07-16'),
@@ -147,6 +153,7 @@ const BETS: Bet[] = [
     against: 'ODELL',
     amount: '100,000 sats',
     odds: '10:1',
+    oddsHolder: 'Marty',
     oddsExplainer: 'ODELL won 100k sats',
     deadline: 'Election Day 2024',
     deadlineDate: new Date('2024-11-05'),
@@ -248,9 +255,13 @@ function ActiveBetCard({ bet }: { bet: Bet }) {
                 <Clock className={`w-3 h-3 ${urgencyColor}`} />
                 <span className={urgencyColor}>{timeRemaining}</span>
               </span>
-              <span className="text-muted-foreground/60">
-                {bet.odds} odds
-              </span>
+              {bet.oddsHolder ? (
+                <span className="text-muted-foreground/60">
+                  {bet.odds} <span className="font-semibold text-foreground/70">{bet.oddsHolder}</span>
+                </span>
+              ) : (
+                <span className="text-muted-foreground/60">even odds</span>
+              )}
             </div>
           </div>
         </div>
@@ -265,7 +276,9 @@ function ActiveBetCard({ bet }: { bet: Bet }) {
               </div>
               <div className="bg-amber-500/5 rounded-lg p-3 border border-amber-500/10">
                 <span className="text-muted-foreground/60 block mb-0.5">Odds</span>
-                <span className="font-semibold text-foreground/90">{bet.odds} ({bet.proposedBy})</span>
+                <span className="font-semibold text-foreground/90">
+                  {bet.oddsHolder ? `${bet.odds} for ${bet.oddsHolder}` : 'Even'}
+                </span>
               </div>
               <div className="bg-amber-500/5 rounded-lg p-3 border border-amber-500/10 sm:col-span-1">
                 <span className="text-muted-foreground/60 block mb-0.5">Payout</span>
@@ -296,7 +309,7 @@ function SettledBetCard({ bet }: { bet: Bet }) {
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-0.5">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mb-0.5">
               <h3 className="font-semibold text-xs sm:text-sm text-foreground/80 leading-tight">
                 {bet.title}
               </h3>
@@ -306,6 +319,13 @@ function SettledBetCard({ bet }: { bet: Bet }) {
               >
                 {bet.amount}
               </Badge>
+              {bet.oddsHolder ? (
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground/50 font-medium">
+                  {bet.odds} <span className="text-foreground/60">{bet.oddsHolder}</span>
+                </span>
+              ) : (
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground/50 font-medium">even</span>
+              )}
             </div>
             <p className="text-[11px] sm:text-xs text-muted-foreground/50 leading-snug">
               {bet.description}
