@@ -17,6 +17,8 @@ import {
   Vote,
   HardDrive,
   CheckCircle2,
+  Users,
+  Bitcoin,
 } from 'lucide-react';
 
 
@@ -161,6 +163,38 @@ const BETS: Bet[] = [
     winner: 'ODELL',
     satsWon: 100_000,
     icon: Vote,
+  },
+];
+
+interface GuestBet {
+  id: string;
+  title: string;
+  description: string;
+  host: 'ODELL' | 'Marty';
+  guest: string;
+  amount: string;
+  odds: string;
+  oddsHolder?: string;
+  deadline: string;
+  deadlineDate: Date;
+  status: 'active' | 'settled';
+  winner?: string;
+  icon: typeof Flame;
+}
+
+const GUEST_BETS: GuestBet[] = [
+  {
+    id: 'strategy-1m-btc',
+    title: 'Strategy Holds 1M+ Bitcoin',
+    description: 'Marty bets Strategy will hold over one million bitcoin by June 15, 2026 at 4pm ET',
+    host: 'Marty',
+    guest: 'Seth (Satoshi Pacioli)',
+    amount: '100,000 sats',
+    odds: 'Even',
+    deadline: 'June 15, 2026 4:00 PM ET',
+    deadlineDate: new Date('2026-06-15T20:00:00Z'),
+    status: 'active',
+    icon: Bitcoin,
   },
 ];
 
@@ -349,6 +383,119 @@ function SettledBetCard({ bet }: { bet: Bet }) {
   );
 }
 
+function GuestBetCard({ bet }: { bet: GuestBet }) {
+  const Icon = bet.icon;
+  const timeRemaining = bet.status === 'active' ? getTimeRemaining(bet.deadlineDate) : null;
+  const urgencyColor = bet.status === 'active' ? getUrgencyColor(bet.deadlineDate) : '';
+
+  return (
+    <Card className="group relative border-border/40 bg-card/20 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-border/60">
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex items-start gap-3">
+          {/* Icon */}
+          <div className="flex-shrink-0 mt-0.5">
+            <div className="w-8 h-8 rounded-lg bg-muted/50 border border-border/30 flex items-center justify-center">
+              <Icon className="w-3.5 h-3.5 text-muted-foreground/60" />
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mb-0.5">
+              <h3 className="font-semibold text-xs sm:text-sm text-foreground/80 leading-tight">
+                {bet.title}
+              </h3>
+              <Badge
+                variant="outline"
+                className="text-[9px] sm:text-[10px] border-muted-foreground/15 bg-muted/30 text-muted-foreground/60 font-medium px-1.5 py-0 flex-shrink-0"
+              >
+                {bet.amount}
+              </Badge>
+              {bet.oddsHolder ? (
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground/50 font-medium">
+                  {bet.odds} <span className="text-foreground/60">{bet.oddsHolder}</span>
+                </span>
+              ) : bet.odds !== 'Even' ? (
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground/50 font-medium">{bet.odds}</span>
+              ) : (
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground/50 font-medium">even</span>
+              )}
+            </div>
+            <p className="text-[11px] sm:text-xs text-muted-foreground/50 leading-snug mb-1.5">
+              {bet.description}
+            </p>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground/60">
+              <span className="flex items-center gap-1">
+                <Swords className="w-3 h-3 text-muted-foreground/40" />
+                <span className="font-semibold text-foreground/70">{bet.host}</span>
+                <span className="text-muted-foreground/30">vs</span>
+                <span className="font-semibold text-foreground/70">{bet.guest}</span>
+              </span>
+              {timeRemaining && (
+                <span className="flex items-center gap-1">
+                  <Clock className={`w-3 h-3 ${urgencyColor}`} />
+                  <span className={urgencyColor}>{timeRemaining}</span>
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Status */}
+          <div className="flex-shrink-0">
+            {bet.status === 'settled' && bet.winner ? (
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                <Trophy className="w-2.5 h-2.5" />
+                {bet.winner}
+              </div>
+            ) : (
+              <Badge
+                variant="outline"
+                className="text-[9px] sm:text-[10px] border-amber-500/15 bg-amber-500/5 text-amber-400/70 font-medium px-1.5 py-0.5"
+              >
+                Live
+              </Badge>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function GuestBetsSection() {
+  const [showGuest, setShowGuest] = useState(false);
+
+  return (
+    <div className="mt-10">
+      <button
+        onClick={() => setShowGuest(!showGuest)}
+        className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground/80 transition-colors duration-200 cursor-pointer"
+      >
+        <div className="h-px flex-1 max-w-[80px] bg-border/50" />
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/40 bg-card/30 hover:bg-card/60 transition-all duration-200">
+          <Users className="w-3.5 h-3.5" />
+          <span className="font-medium">Guest Bets</span>
+          <span className="text-xs text-muted-foreground/50">({GUEST_BETS.length})</span>
+          {showGuest ? (
+            <ChevronUp className="w-3.5 h-3.5 text-muted-foreground/40" />
+          ) : (
+            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground/40" />
+          )}
+        </div>
+        <div className="h-px flex-1 max-w-[80px] bg-border/50" />
+      </button>
+
+      {showGuest && (
+        <div className="mt-4 space-y-2 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
+          {GUEST_BETS.map((bet) => (
+            <GuestBetCard key={bet.id} bet={bet} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function BetTracker() {
   const activeBets = BETS.filter((b) => b.status === 'active');
   const settledBets = BETS.filter((b) => b.status === 'settled');
@@ -443,6 +590,9 @@ export function BetTracker() {
             ))}
           </div>
         </div>
+
+        {/* Guest bets section */}
+        <GuestBetsSection />
       </div>
     </section>
   );
