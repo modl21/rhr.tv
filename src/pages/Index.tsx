@@ -1,19 +1,12 @@
 import { useSeoMeta } from '@unhead/react';
 import {
   Podcast,
-  Zap,
-  Compass,
-  Shield,
-  ArrowDown,
   Bitcoin,
   Radio,
-  MessageCircle,
   Video,
   MonitorPlay,
-  Tv,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { DonateDialog } from '@/components/DonateDialog';
 import { TopSupporters } from '@/components/TopSupporters';
 import { BetTracker } from '@/components/BetTracker';
@@ -30,243 +23,194 @@ const LINKS = {
 };
 
 function HeroSection() {
+  const weeks = Math.floor(
+    (Date.now() - new Date('2018-08-27').getTime()) / (7 * 24 * 60 * 60 * 1000)
+  );
+
   return (
-    <section className="relative min-h-[68vh] sm:min-h-[72vh] flex flex-col items-center justify-center overflow-hidden isolate py-16 sm:py-20">
-      {/* Background layers */}
-      <div className="absolute inset-0 -z-10">
-        {/* Radial gradient background */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(245,158,11,0.12),transparent_70%)]" />
-        {/* Grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(245,158,11,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.3) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px',
-          }}
-        />
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent" />
-      </div>
+    <section className="relative flex flex-col items-center justify-center px-6 py-20 sm:py-28 lg:py-32">
+      <div className="relative z-10 flex max-w-2xl flex-col items-center text-center">
+        {/* Small label */}
+        <div className="animate-fade-in-up mb-10 flex items-center gap-3 text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground/70">
+          <span className="h-px w-8 bg-border" />
+          <span>Est. 2018</span>
+          <span className="h-px w-8 bg-border" />
+        </div>
 
-      {/* Floating amber orbs */}
-      <div className="absolute top-1/4 left-[10%] w-72 h-72 rounded-full bg-amber-500/5 blur-3xl animate-float" />
-      <div className="absolute bottom-1/4 right-[10%] w-96 h-96 rounded-full bg-amber-500/3 blur-3xl animate-float animation-delay-200" />
-
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto flex flex-col items-center">
         {/* Logo */}
-        <div className="mb-5 sm:mb-6 animate-fade-in-up">
-          <div className="inline-block relative">
-            <div className="absolute -inset-4 bg-amber-500/10 rounded-2xl blur-2xl" />
-            <img
-              src={LINKS.logo}
-              alt="Rabbit Hole Recap"
-              className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-2xl object-cover border border-amber-500/20 shadow-2xl"
-            />
-          </div>
+        <div className="animate-fade-in-up animation-delay-100 mb-10">
+          <img
+            src={LINKS.logo}
+            alt="Rabbit Hole Recap"
+            className="h-28 w-28 rounded-full object-cover ring-1 ring-border sm:h-32 sm:w-32"
+          />
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-3 animate-fade-in-up animation-delay-100">
-          <span className="gradient-text">RABBIT HOLE</span>{' '}
-          <span className="text-foreground">RECAP</span>
+        <h1 className="serif animate-fade-in-up animation-delay-200 mb-5 text-4xl font-normal leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+          Rabbit Hole<br />
+          <span className="italic accent-text">Recap</span>
         </h1>
 
         {/* Tagline */}
-        <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto mb-3 animate-fade-in-up animation-delay-200 text-center">
-          Bitcoin and Freedom Tech with ODELL and Marty Bent
+        <p className="animate-fade-in-up animation-delay-300 mb-8 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
+          Bitcoin &amp; freedom tech, weekly. Hosted by{' '}
+          <a
+            href={LINKS.odellNostr}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground underline decoration-border decoration-1 underline-offset-4 transition-colors hover:decoration-foreground"
+          >
+            ODELL
+          </a>{' '}
+          &amp;{' '}
+          <a
+            href={LINKS.martyNostr}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground underline decoration-border decoration-1 underline-offset-4 transition-colors hover:decoration-foreground"
+          >
+            Marty Bent
+          </a>
+          .
         </p>
 
-        {/* Weeks counter badge */}
-        <div className="flex items-center justify-center gap-2 mb-4 animate-fade-in-up animation-delay-300">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-black text-sm font-medium">
-            <Radio className="w-4 h-4" />
-            <span className="lowercase">{Math.floor((Date.now() - new Date('2018-08-27').getTime()) / (7 * 24 * 60 * 60 * 1000))} weeks in a row</span>
-          </div>
+        {/* Streak badge */}
+        <div className="animate-fade-in-up animation-delay-400 mb-10 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1.5 text-xs tracking-wide text-muted-foreground backdrop-blur">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[hsl(var(--accent))] opacity-60" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent))]" />
+          </span>
+          <span className="tabular-nums">{weeks}</span>
+          <span className="text-muted-foreground/70">weeks in a row</span>
         </div>
 
-        {/* Top Supporters */}
-        <div className="mb-6 animate-fade-in-up animation-delay-400">
-          <TopSupporters />
-        </div>
-
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6 animate-fade-in-up animation-delay-400">
+        {/* Primary actions */}
+        <div className="animate-fade-in-up animation-delay-400 mb-10 flex w-full flex-col items-center justify-center gap-3 sm:flex-row">
           <DonateDialog>
             <Button
               size="lg"
-              className="rounded-full px-7 py-5 text-sm sm:text-base font-semibold bg-[#FFD700] hover:bg-[#FFD700]/90 text-black shadow-[0_0_20px_rgba(255,215,0,0.3)] transition-all duration-300 hover:scale-105"
+              className="h-11 w-full rounded-full bg-[hsl(var(--accent))] px-7 text-sm font-medium text-[hsl(var(--accent-foreground))] transition-colors hover:bg-[hsl(var(--accent))]/90 sm:w-auto"
             >
-              <Bitcoin className="w-5 h-5 mr-2" />
+              <Bitcoin className="mr-2 h-4 w-4" strokeWidth={1.75} />
               Support with Bitcoin
             </Button>
           </DonateDialog>
           <Button
             asChild
             size="lg"
-            className="rounded-full px-7 py-5 text-sm sm:text-base font-semibold bg-amber-500 hover:bg-amber-400 text-black glow-amber transition-all duration-300 hover:scale-105"
+            variant="outline"
+            className="h-11 w-full rounded-full border-border bg-transparent px-7 text-sm font-medium text-foreground transition-colors hover:bg-card hover:text-foreground sm:w-auto"
           >
             <a href={LINKS.podcast} target="_blank" rel="noopener noreferrer">
-              <Podcast className="w-5 h-5 mr-2" />
-              Listen to Podcast
+              <Podcast className="mr-2 h-4 w-4" strokeWidth={1.75} />
+              Listen to podcast
             </a>
           </Button>
         </div>
 
-        {/* Hosted by */}
-        <p className="text-sm text-muted-foreground mb-8 animate-fade-in-up animation-delay-500">
-          Hosted by{' '}
-          <a
-            href={LINKS.odellNostr}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-amber-400 hover:text-amber-300 font-semibold transition-colors underline underline-offset-4 decoration-amber-500/30 hover:decoration-amber-400/60"
-          >
-            ODELL
-          </a>
-          {' '}&{' '}
-          <a
-            href={LINKS.martyNostr}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-amber-400 hover:text-amber-300 font-semibold transition-colors underline underline-offset-4 decoration-amber-500/30 hover:decoration-amber-400/60"
-          >
-            Marty Bent
-          </a>
-        </p>
+        {/* Top supporters */}
+        <div className="animate-fade-in-up animation-delay-500 mb-10">
+          <TopSupporters />
+        </div>
 
-        <QuickLinksSection />
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 animate-bounce opacity-30">
-        <ArrowDown className="w-5 h-5 text-amber-400" />
+        <QuickLinks />
       </div>
     </section>
   );
 }
 
-function QuickLinksSection() {
+function QuickLinks() {
   const links = [
-    {
-      label: 'Nostr Feed',
-      href: LINKS.nostrFeed,
-      icon: Radio,
-    },
-    {
-      label: 'Twitch',
-      href: LINKS.twitch,
-      icon: MonitorPlay,
-    },
-    {
-      label: 'YouTube',
-      href: LINKS.youtube,
-      icon: Video,
-    },
+    { label: 'Nostr', href: LINKS.nostrFeed, icon: Radio },
+    { label: 'Twitch', href: LINKS.twitch, icon: MonitorPlay },
+    { label: 'YouTube', href: LINKS.youtube, icon: Video },
   ];
 
   return (
-    <div className="max-w-[920px] mx-auto">
-      <div className="flex flex-wrap justify-center gap-3">
-        {links.map((link) => (
-          <Button
-            key={link.label}
-            asChild
-            size="lg"
-            variant="outline"
-            className="w-full sm:w-[208px] rounded-full px-7 py-5 text-sm sm:text-base font-semibold border-[#FFD700] text-black bg-[#FFD700] hover:bg-[#FFD700]/90 transition-all duration-300 shadow-[0_0_15px_rgba(255,215,0,0.2)]"
-          >
-            <a href={link.href} target="_blank" rel="noopener noreferrer">
-              <link.icon className="w-5 h-5 mr-2" />
-              {link.label}
-            </a>
-          </Button>
-        ))}
-      </div>
+    <div className="animate-fade-in-up animation-delay-500 flex w-full items-center justify-center gap-2 sm:gap-3">
+      {links.map((link) => (
+        <a
+          key={link.label}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-4 py-2 text-xs font-medium text-muted-foreground transition-all duration-200 hover:border-border/80 hover:bg-card hover:text-foreground"
+        >
+          <link.icon
+            className="h-3.5 w-3.5 text-muted-foreground/60 transition-colors group-hover:text-[hsl(var(--accent))]"
+            strokeWidth={1.75}
+          />
+          {link.label}
+        </a>
+      ))}
     </div>
-  );
-}
-
-function DonateSection() {
-  return (
-    <section className="relative py-14 sm:py-16 px-6">
-      {/* Background accent */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_50%,rgba(245,158,11,0.06),transparent_70%)]" />
-
-      <div className="relative max-w-3xl mx-auto">
-        <Card className="border-amber-500/20 bg-card/60 backdrop-blur-sm overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
-          <CardContent className="p-6 sm:p-8 text-center">
-            <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium">
-              <Zap className="w-4 h-4" />
-              Community Funded
-            </div>
-
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">
-              Support <span className="gradient-text">Rabbit Hole Recap</span>
-            </h2>
-
-            <p className="text-muted-foreground max-w-lg mx-auto mb-5 text-base sm:text-lg leading-relaxed">
-              RHR is funded entirely by donations from our audience. We do not have ads or sponsors. Your support keeps us going in this journey down the rabbit hole.
-            </p>
-
-            <DonateDialog>
-              <Button
-                size="lg"
-                className="rounded-full px-8 py-5 text-sm sm:text-base font-semibold bg-[#FFD700] hover:bg-[#FFD700]/90 text-black shadow-[0_0_20px_rgba(255,215,0,0.4)] transition-all duration-300 hover:scale-105 animate-pulse-glow"
-              >
-                <Bitcoin className="w-5 h-5 mr-2" />
-                Donate Bitcoin
-              </Button>
-            </DonateDialog>
-          </CardContent>
-        </Card>
-      </div>
-    </section>
   );
 }
 
 function Footer() {
   return (
-    <footer className="relative py-8 px-6 border-t border-border/50">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          {/* Left */}
-          <div className="flex items-center gap-3">
-            <img
-              src={LINKS.logo}
-              alt="Rabbit Hole Recap"
-              className="w-8 h-8 rounded-lg object-cover border border-amber-500/20"
-            />
-            <span className="text-sm font-semibold text-foreground/80 lowercase tracking-tighter">rhr.tv</span>
-          </div>
+    <footer className="mt-16 border-t border-border/60 px-6 py-10">
+      <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-5 text-center sm:flex-row sm:text-left">
+        <div className="flex items-center gap-3">
+          <img
+            src={LINKS.logo}
+            alt="Rabbit Hole Recap"
+            className="h-7 w-7 rounded-full object-cover ring-1 ring-border"
+          />
+          <span className="serif text-sm tracking-tight text-foreground/90">rhr.tv</span>
+        </div>
 
-          {/* Center */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
-            <a href={LINKS.podcast} target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">
-              Podcast
-            </a>
-            <a href={LINKS.nostrFeed} target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">
-              Nostr
-            </a>
-            <DonateDialog className="inline">
-              <button className="hover:text-amber-400 transition-colors cursor-pointer">
-                Donate
-              </button>
-            </DonateDialog>
-          </div>
+        <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+          <a
+            href={LINKS.podcast}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            Podcast
+          </a>
+          <a
+            href={LINKS.nostrFeed}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            Nostr
+          </a>
+          <a
+            href={LINKS.twitch}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            Twitch
+          </a>
+          <a
+            href={LINKS.youtube}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            YouTube
+          </a>
+          <DonateDialog className="inline">
+            <button className="cursor-pointer transition-colors hover:text-foreground">
+              Donate
+            </button>
+          </DonateDialog>
+        </nav>
 
-          {/* Right */}
-          <div className="text-xs text-muted-foreground/60">
-            Vibed with{' '}
-            <a
-              href="https://shakespeare.diy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-amber-500/60 hover:text-amber-400 transition-colors"
-            >
-              Shakespeare
-            </a>
-          </div>
+        <div className="text-[11px] text-muted-foreground/50">
+          Vibed with{' '}
+          <a
+            href="https://shakespeare.diy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            Shakespeare
+          </a>
         </div>
       </div>
     </footer>
@@ -288,8 +232,9 @@ const Index = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground">
       <HeroSection />
+      <div className="mx-auto h-px w-full max-w-3xl hairline" />
       <BetTracker />
       <Footer />
     </div>

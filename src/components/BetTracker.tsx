@@ -1,26 +1,22 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import {
   Flame,
   Target,
   Clock,
-  Swords,
-  TrendingUp,
   ChevronDown,
   ChevronUp,
-  Zap,
   Trophy,
   ScrollText,
   Landmark,
   ShieldCheck,
   Vote,
   HardDrive,
-  CheckCircle2,
   Users,
   Bitcoin,
+  TrendingUp,
 } from 'lucide-react';
-
+import { cn } from '@/lib/utils';
 
 interface Bet {
   id: string;
@@ -217,107 +213,105 @@ function getTimeRemaining(deadline: Date): string {
   return '<1d';
 }
 
-function getUrgencyColor(deadline: Date): string {
+function getUrgencyClass(deadline: Date): string {
   const now = new Date();
   const diff = deadline.getTime() - now.getTime();
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  if (days <= 14) return 'text-red-400';
-  if (days <= 60) return 'text-amber-400';
-  return 'text-emerald-400';
+  if (days <= 14) return 'text-destructive';
+  if (days <= 60) return 'text-[hsl(var(--accent))]';
+  return 'text-muted-foreground';
 }
 
 function ActiveBetCard({ bet }: { bet: Bet }) {
   const [expanded, setExpanded] = useState(false);
   const Icon = bet.icon;
   const timeRemaining = getTimeRemaining(bet.deadlineDate);
-  const urgencyColor = getUrgencyColor(bet.deadlineDate);
+  const urgency = getUrgencyClass(bet.deadlineDate);
 
   return (
     <Card
-      className="group relative border-amber-500/15 bg-card/40 backdrop-blur-sm overflow-hidden cursor-pointer transition-all duration-300 hover:border-amber-500/30 hover:shadow-[0_0_30px_-10px_rgba(245,158,11,0.15)]"
+      className="group cursor-pointer overflow-hidden border-border bg-card/40 transition-colors duration-300 hover:border-border/80 hover:bg-card/70"
       onClick={() => setExpanded(!expanded)}
     >
-      {/* Top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent group-hover:via-amber-500/50 transition-all duration-300" />
-
-      <CardContent className="p-4 sm:p-5">
-        {/* Main row */}
-        <div className="flex items-start gap-3 sm:gap-4">
+      <CardContent className="p-5 sm:p-6">
+        <div className="flex items-start gap-4">
           {/* Icon */}
-          <div className="flex-shrink-0 mt-0.5">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center group-hover:bg-amber-500/15 transition-colors duration-300">
-              <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+          <div className="flex-shrink-0">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background">
+              <Icon className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} />
             </div>
           </div>
 
           {/* Content */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2 mb-1.5">
-              <h3 className="font-bold text-sm sm:text-base text-foreground leading-tight">
+          <div className="min-w-0 flex-1">
+            <div className="mb-1 flex items-start justify-between gap-3">
+              <h3 className="serif text-base font-medium leading-snug text-foreground sm:text-lg">
                 {bet.title}
               </h3>
-              <div className="flex items-center gap-1.5 flex-shrink-0">
-                <Badge
-                  variant="outline"
-                  className="text-[10px] sm:text-xs border-amber-500/20 bg-amber-500/5 text-amber-400 font-semibold px-2 py-0.5"
-                >
-                  <Zap className="w-2.5 h-2.5 mr-0.5" />
-                  {bet.amount}
-                </Badge>
-                {expanded ? (
-                  <ChevronUp className="w-4 h-4 text-muted-foreground/50" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-muted-foreground/50" />
-                )}
-              </div>
+              {expanded ? (
+                <ChevronUp className="mt-1 h-4 w-4 flex-shrink-0 text-muted-foreground/60" strokeWidth={1.5} />
+              ) : (
+                <ChevronDown className="mt-1 h-4 w-4 flex-shrink-0 text-muted-foreground/60" strokeWidth={1.5} />
+              )}
             </div>
 
-            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-2">
+            <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
               {bet.description}
             </p>
 
-            {/* Matchup & Meta */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground/80">
-              <span className="flex items-center gap-1">
-                <Swords className="w-3 h-3 text-amber-500/60" />
-                <span className="font-semibold text-amber-400">{bet.proposedBy}</span>
+            {/* Meta row */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <span className="font-medium text-foreground">{bet.proposedBy}</span>
                 <span className="text-muted-foreground/40">vs</span>
-                <span className="font-semibold text-foreground/80">{bet.against}</span>
+                <span className="font-medium text-foreground/80">{bet.against}</span>
               </span>
-              <span className="flex items-center gap-1">
-                <Clock className={`w-3 h-3 ${urgencyColor}`} />
-                <span className={urgencyColor}>{timeRemaining}</span>
+              <span className="flex items-center gap-1.5">
+                <Clock className={cn('h-3 w-3', urgency)} strokeWidth={1.75} />
+                <span className={urgency}>{timeRemaining}</span>
               </span>
-              {bet.oddsHolder ? (
-                <span className="text-muted-foreground/60">
-                  {bet.odds} <span className="font-semibold text-foreground/70">{bet.oddsHolder}</span>
-                </span>
-              ) : (
-                <span className="text-muted-foreground/60">even odds</span>
-              )}
+              <span className="tabular-nums">
+                {bet.amount}
+                {bet.oddsHolder ? (
+                  <>
+                    {' · '}
+                    <span>{bet.odds}</span>
+                    <span className="text-muted-foreground/60"> for {bet.oddsHolder}</span>
+                  </>
+                ) : (
+                  ' · even'
+                )}
+              </span>
             </div>
           </div>
         </div>
 
         {/* Expanded details */}
         {expanded && (
-          <div className="mt-4 pt-3 border-t border-amber-500/10 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-              <div className="bg-amber-500/5 rounded-lg p-3 border border-amber-500/10">
-                <span className="text-muted-foreground/60 block mb-0.5">Deadline</span>
-                <span className="font-semibold text-foreground/90">{bet.deadline}</span>
+          <div
+            className="animate-fade-in-up mt-5 grid grid-cols-1 gap-3 border-t border-border/60 pt-5 text-xs sm:grid-cols-3"
+            style={{ animationDuration: '0.3s' }}
+          >
+            <div>
+              <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                Deadline
               </div>
-              <div className="bg-amber-500/5 rounded-lg p-3 border border-amber-500/10">
-                <span className="text-muted-foreground/60 block mb-0.5">Odds</span>
-                <span className="font-semibold text-foreground/90">
-                  {bet.oddsHolder ? `${bet.odds} for ${bet.oddsHolder}` : 'Even'}
-                </span>
+              <div className="text-foreground/90">{bet.deadline}</div>
+            </div>
+            <div>
+              <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                Odds
               </div>
-              <div className="bg-amber-500/5 rounded-lg p-3 border border-amber-500/10 sm:col-span-1">
-                <span className="text-muted-foreground/60 block mb-0.5">Payout</span>
-                <span className="font-semibold text-foreground/90">{bet.oddsExplainer}</span>
+              <div className="text-foreground/90">
+                {bet.oddsHolder ? `${bet.odds} for ${bet.oddsHolder}` : 'Even'}
               </div>
+            </div>
+            <div>
+              <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                Payout
+              </div>
+              <div className="text-foreground/90">{bet.oddsExplainer}</div>
             </div>
           </div>
         )}
@@ -326,139 +320,84 @@ function ActiveBetCard({ bet }: { bet: Bet }) {
   );
 }
 
-function SettledBetCard({ bet }: { bet: Bet }) {
+function SettledBetRow({ bet }: { bet: Bet }) {
   const Icon = bet.icon;
-  const winnerIsOdell = bet.winner === 'ODELL';
 
   return (
-    <Card className="group relative border-border/40 bg-card/20 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-border/60">
-      <CardContent className="p-3 sm:p-4">
-        <div className="flex items-center gap-3">
-          {/* Icon */}
-          <div className="flex-shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-muted/50 border border-border/30 flex items-center justify-center">
-              <Icon className="w-3.5 h-3.5 text-muted-foreground/60" />
-            </div>
-          </div>
+    <div className="group flex items-center gap-4 border-b border-border/40 py-3.5 last:border-b-0">
+      <div className="flex-shrink-0">
+        <Icon className="h-3.5 w-3.5 text-muted-foreground/50" strokeWidth={1.75} />
+      </div>
 
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mb-0.5">
-              <h3 className="font-semibold text-xs sm:text-sm text-foreground/80 leading-tight">
-                {bet.title}
-              </h3>
-              <Badge
-                variant="outline"
-                className="text-[9px] sm:text-[10px] border-muted-foreground/15 bg-muted/30 text-muted-foreground/60 font-medium px-1.5 py-0 flex-shrink-0"
-              >
-                {bet.amount}
-              </Badge>
-              {bet.oddsHolder ? (
-                <span className="text-[9px] sm:text-[10px] text-muted-foreground/50 font-medium">
-                  {bet.odds} <span className="text-foreground/60">{bet.oddsHolder}</span>
-                </span>
-              ) : (
-                <span className="text-[9px] sm:text-[10px] text-muted-foreground/50 font-medium">even</span>
-              )}
-            </div>
-            <p className="text-[11px] sm:text-xs text-muted-foreground/50 leading-snug">
-              {bet.description}
-            </p>
-          </div>
-
-          {/* Winner badge */}
-          <div className="flex-shrink-0">
-            <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold ${
-              winnerIsOdell
-                ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-            }`}>
-              <Trophy className="w-2.5 h-2.5" />
-              {bet.winner}
-            </div>
-          </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-baseline gap-x-2">
+          <h3 className="text-sm font-medium text-foreground/90">{bet.title}</h3>
+          <span className="text-[11px] tabular-nums text-muted-foreground/60">
+            {bet.amount}
+          </span>
         </div>
-      </CardContent>
-    </Card>
+        <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground/70">
+          {bet.description}
+        </p>
+      </div>
+
+      <div className="flex flex-shrink-0 items-center gap-1.5 text-xs">
+        <Trophy className="h-3 w-3 text-[hsl(var(--accent))]/70" strokeWidth={1.75} />
+        <span className="font-medium text-foreground/90">{bet.winner}</span>
+      </div>
+    </div>
   );
 }
 
-function GuestBetCard({ bet }: { bet: GuestBet }) {
+function GuestBetRow({ bet }: { bet: GuestBet }) {
   const Icon = bet.icon;
   const timeRemaining = bet.status === 'active' ? getTimeRemaining(bet.deadlineDate) : null;
-  const urgencyColor = bet.status === 'active' ? getUrgencyColor(bet.deadlineDate) : '';
+  const urgency = bet.status === 'active' ? getUrgencyClass(bet.deadlineDate) : '';
 
   return (
-    <Card className="group relative border-border/40 bg-card/20 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-border/60">
-      <CardContent className="p-3 sm:p-4">
-        <div className="flex items-start gap-3">
-          {/* Icon */}
-          <div className="flex-shrink-0 mt-0.5">
-            <div className="w-8 h-8 rounded-lg bg-muted/50 border border-border/30 flex items-center justify-center">
-              <Icon className="w-3.5 h-3.5 text-muted-foreground/60" />
-            </div>
-          </div>
+    <div className="flex items-start gap-4 border-b border-border/40 py-3.5 last:border-b-0">
+      <div className="mt-0.5 flex-shrink-0">
+        <Icon className="h-3.5 w-3.5 text-muted-foreground/50" strokeWidth={1.75} />
+      </div>
 
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mb-0.5">
-              <h3 className="font-semibold text-xs sm:text-sm text-foreground/80 leading-tight">
-                {bet.title}
-              </h3>
-              <Badge
-                variant="outline"
-                className="text-[9px] sm:text-[10px] border-muted-foreground/15 bg-muted/30 text-muted-foreground/60 font-medium px-1.5 py-0 flex-shrink-0"
-              >
-                {bet.amount}
-              </Badge>
-              {bet.oddsHolder ? (
-                <span className="text-[9px] sm:text-[10px] text-muted-foreground/50 font-medium">
-                  {bet.odds} <span className="text-foreground/60">{bet.oddsHolder}</span>
-                </span>
-              ) : bet.odds !== 'Even' ? (
-                <span className="text-[9px] sm:text-[10px] text-muted-foreground/50 font-medium">{bet.odds}</span>
-              ) : (
-                <span className="text-[9px] sm:text-[10px] text-muted-foreground/50 font-medium">even</span>
-              )}
-            </div>
-            <p className="text-[11px] sm:text-xs text-muted-foreground/50 leading-snug mb-1.5">
-              {bet.description}
-            </p>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground/60">
-              <span className="flex items-center gap-1">
-                <Swords className="w-3 h-3 text-muted-foreground/40" />
-                <span className="font-semibold text-foreground/70">{bet.host}</span>
-                <span className="text-muted-foreground/30">vs</span>
-                <span className="font-semibold text-foreground/70">{bet.guest}</span>
-              </span>
-              {timeRemaining && (
-                <span className="flex items-center gap-1">
-                  <Clock className={`w-3 h-3 ${urgencyColor}`} />
-                  <span className={urgencyColor}>{timeRemaining}</span>
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Status */}
-          <div className="flex-shrink-0">
-            {bet.status === 'settled' && bet.winner ? (
-              <div className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                <Trophy className="w-2.5 h-2.5" />
-                {bet.winner}
-              </div>
-            ) : (
-              <Badge
-                variant="outline"
-                className="text-[9px] sm:text-[10px] border-amber-500/15 bg-amber-500/5 text-amber-400/70 font-medium px-1.5 py-0.5"
-              >
-                Live
-              </Badge>
-            )}
-          </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-baseline gap-x-2">
+          <h3 className="text-sm font-medium text-foreground/90">{bet.title}</h3>
+          <span className="text-[11px] tabular-nums text-muted-foreground/60">
+            {bet.amount}
+          </span>
         </div>
-      </CardContent>
-    </Card>
+        <p className="mb-1.5 mt-0.5 text-xs text-muted-foreground/70">
+          {bet.description}
+        </p>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground/70">
+          <span>
+            <span className="font-medium text-foreground/80">{bet.host}</span>
+            <span className="text-muted-foreground/40"> vs </span>
+            <span className="font-medium text-foreground/80">{bet.guest}</span>
+          </span>
+          {timeRemaining && (
+            <span className={cn('flex items-center gap-1', urgency)}>
+              <Clock className="h-3 w-3" strokeWidth={1.75} />
+              {timeRemaining}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="flex-shrink-0 text-xs">
+        {bet.status === 'settled' && bet.winner ? (
+          <div className="flex items-center gap-1.5">
+            <Trophy className="h-3 w-3 text-[hsl(var(--accent))]/70" strokeWidth={1.75} />
+            <span className="font-medium text-foreground/90">{bet.winner}</span>
+          </div>
+        ) : (
+          <span className="text-[10px] uppercase tracking-wider text-[hsl(var(--accent))]/80">
+            Live
+          </span>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -466,29 +405,29 @@ function GuestBetsSection() {
   const [showGuest, setShowGuest] = useState(false);
 
   return (
-    <div className="mt-10">
+    <div className="mt-12">
       <button
         onClick={() => setShowGuest(!showGuest)}
-        className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground/80 transition-colors duration-200 cursor-pointer"
+        className="group flex w-full items-center justify-center gap-3 text-xs text-muted-foreground transition-colors hover:text-foreground"
       >
-        <div className="h-px flex-1 max-w-[80px] bg-border/50" />
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/40 bg-card/30 hover:bg-card/60 transition-all duration-200">
-          <Users className="w-3.5 h-3.5" />
-          <span className="font-medium">Guest Bets</span>
-          <span className="text-xs text-muted-foreground/50">({GUEST_BETS.length})</span>
+        <div className="h-px flex-1 max-w-[80px] bg-border/60" />
+        <div className="flex items-center gap-1.5 rounded-full border border-border bg-card/40 px-3 py-1.5 transition-colors group-hover:bg-card">
+          <Users className="h-3 w-3" strokeWidth={1.75} />
+          <span className="font-medium">Guest bets</span>
+          <span className="tabular-nums text-muted-foreground/50">({GUEST_BETS.length})</span>
           {showGuest ? (
-            <ChevronUp className="w-3.5 h-3.5 text-muted-foreground/40" />
+            <ChevronUp className="h-3 w-3 text-muted-foreground/50" strokeWidth={1.75} />
           ) : (
-            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground/40" />
+            <ChevronDown className="h-3 w-3 text-muted-foreground/50" strokeWidth={1.75} />
           )}
         </div>
-        <div className="h-px flex-1 max-w-[80px] bg-border/50" />
+        <div className="h-px flex-1 max-w-[80px] bg-border/60" />
       </button>
 
       {showGuest && (
-        <div className="mt-4 space-y-2 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
+        <div className="animate-fade-in-up mt-4" style={{ animationDuration: '0.3s' }}>
           {GUEST_BETS.map((bet) => (
-            <GuestBetCard key={bet.id} bet={bet} />
+            <GuestBetRow key={bet.id} bet={bet} />
           ))}
         </div>
       )}
@@ -502,56 +441,53 @@ export function BetTracker() {
 
   const odellWins = settledBets.filter((b) => b.winner === 'ODELL').length;
   const martyWins = settledBets.filter((b) => b.winner === 'Marty').length;
-  const odellSatsWon = settledBets.filter((b) => b.winner === 'ODELL').reduce((sum, b) => sum + (b.satsWon ?? 0), 0);
-  const martySatsWon = settledBets.filter((b) => b.winner === 'Marty').reduce((sum, b) => sum + (b.satsWon ?? 0), 0);
+  const odellSatsWon = settledBets
+    .filter((b) => b.winner === 'ODELL')
+    .reduce((sum, b) => sum + (b.satsWon ?? 0), 0);
+  const martySatsWon = settledBets
+    .filter((b) => b.winner === 'Marty')
+    .reduce((sum, b) => sum + (b.satsWon ?? 0), 0);
 
   return (
-    <section className="relative py-10 sm:py-14 px-6">
-      {/* Background accent */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_50%,rgba(245,158,11,0.04),transparent_70%)]" />
-
-      <div className="relative max-w-3xl mx-auto">
+    <section className="px-6 py-20 sm:py-24">
+      <div className="mx-auto max-w-2xl">
         {/* Section header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 mb-3 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium">
-            <Flame className="w-4 h-4" />
-            Live Bet Tracker
+        <div className="mb-12 text-center">
+          <div className="mb-5 flex items-center justify-center gap-3 text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground/70">
+            <span className="h-px w-8 bg-border" />
+            <span>The Wager</span>
+            <span className="h-px w-8 bg-border" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold mb-2">
-            <span className="gradient-text">ODELL</span>
-            <span className="text-foreground"> vs </span>
-            <span className="gradient-text">Marty</span>
+          <h2 className="serif mb-3 text-3xl font-normal tracking-tight text-foreground sm:text-4xl">
+            ODELL <span className="italic text-muted-foreground">vs</span> Marty
           </h2>
-          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+          <p className="mx-auto max-w-md text-sm leading-relaxed text-muted-foreground">
             Active bets between the hosts — settled on air, paid in sats.
           </p>
         </div>
 
-        {/* Performance scoreboard */}
-        <div className="mb-6 sm:mb-8">
-          <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
-            {/* ODELL stats */}
-            <div className="relative rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-center overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
-              <p className="text-xs text-muted-foreground/60 mb-1 uppercase tracking-wider font-medium">ODELL</p>
-              <p className="text-2xl sm:text-3xl font-black text-amber-400 leading-none mb-1">
-                {odellWins} <span className="text-base sm:text-lg font-bold text-amber-400/60">wins</span>
-              </p>
-              <p className="text-xs text-muted-foreground/50">
-                <Zap className="w-3 h-3 inline -mt-0.5 text-amber-400/50" /> {formatSats(odellSatsWon)} won
-              </p>
+        {/* Scoreboard */}
+        <div className="mb-10 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border">
+          <div className="bg-card p-5 text-center">
+            <div className="mb-1.5 text-[10px] uppercase tracking-widest text-muted-foreground/70">
+              ODELL
             </div>
-
-            {/* Marty stats */}
-            <div className="relative rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-center overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
-              <p className="text-xs text-muted-foreground/60 mb-1 uppercase tracking-wider font-medium">Marty</p>
-              <p className="text-2xl sm:text-3xl font-black text-emerald-400 leading-none mb-1">
-                {martyWins} <span className="text-base sm:text-lg font-bold text-emerald-400/60">{martyWins === 1 ? 'win' : 'wins'}</span>
-              </p>
-              <p className="text-xs text-muted-foreground/50">
-                <Zap className="w-3 h-3 inline -mt-0.5 text-emerald-400/50" /> {formatSats(martySatsWon)} won
-              </p>
+            <div className="serif mb-1 text-3xl font-normal tabular-nums text-foreground">
+              {odellWins}
+            </div>
+            <div className="text-[11px] text-muted-foreground tabular-nums">
+              {formatSats(odellSatsWon)} sats won
+            </div>
+          </div>
+          <div className="bg-card p-5 text-center">
+            <div className="mb-1.5 text-[10px] uppercase tracking-widest text-muted-foreground/70">
+              Marty
+            </div>
+            <div className="serif mb-1 text-3xl font-normal tabular-nums text-foreground">
+              {martyWins}
+            </div>
+            <div className="text-[11px] text-muted-foreground tabular-nums">
+              {formatSats(martySatsWon)} sats won
             </div>
           </div>
         </div>
@@ -564,34 +500,26 @@ export function BetTracker() {
         </div>
 
         {/* Total stake */}
-        <div className="mt-6 flex items-center justify-center">
-          <div className="flex items-center gap-2 text-sm">
-            <Zap className="w-3 h-3 text-amber-400" />
-            <span className="text-muted-foreground">
-              <span className="font-bold text-foreground">200k</span> sats at stake
-            </span>
-          </div>
+        <div className="mt-6 text-center text-xs text-muted-foreground">
+          <span className="tabular-nums text-foreground/80">200k</span> sats at stake
         </div>
 
-        {/* Settled bets section */}
-        <div className="mt-10">
-          <div className="flex items-center justify-center gap-2 mb-4 text-sm text-muted-foreground">
-            <div className="h-px flex-1 max-w-[80px] bg-border/50" />
-            <div className="flex items-center gap-1.5 px-3 py-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              <span className="font-medium">Past Bets</span>
-            </div>
-            <div className="h-px flex-1 max-w-[80px] bg-border/50" />
+        {/* Settled bets */}
+        <div className="mt-12">
+          <div className="mb-4 flex items-center justify-center gap-3 text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground/70">
+            <span className="h-px w-8 bg-border" />
+            <span>Past bets</span>
+            <span className="h-px w-8 bg-border" />
           </div>
 
-          <div className="space-y-2">
+          <div>
             {settledBets.map((bet) => (
-              <SettledBetCard key={bet.id} bet={bet} />
+              <SettledBetRow key={bet.id} bet={bet} />
             ))}
           </div>
         </div>
 
-        {/* Guest bets section */}
+        {/* Guest bets */}
         <GuestBetsSection />
       </div>
     </section>

@@ -379,17 +379,17 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
           {children}
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[440px] max-h-[95vh] overflow-y-auto border-amber-500/20 bg-card/95 backdrop-blur-xl">
+      <DialogContent className="sm:max-w-[440px] max-h-[95vh] overflow-y-auto border-border bg-card/95 backdrop-blur-xl">
         <DialogHeader className="text-center">
           <DialogTitle className="text-xl font-bold">
             {invoice ? (
               <span className="flex items-center justify-center gap-2">
-                <Zap className="w-5 h-5 text-amber-400" />
+                <Zap className="w-5 h-5 text-[hsl(var(--accent))]" />
                 Lightning Invoice
               </span>
             ) : (
               <span className="flex items-center justify-center gap-2">
-                <Bitcoin className="w-5 h-5 text-amber-400" />
+                <Bitcoin className="w-5 h-5 text-[hsl(var(--accent))]" />
                 Support RHR
               </span>
             )}
@@ -406,7 +406,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
           <div className="flex flex-col items-center gap-4">
             {/* Amount display */}
             <div className="text-center">
-              <span className="text-3xl font-bold text-amber-400">
+              <span className="serif text-3xl font-normal text-[hsl(var(--accent))]">
                 {formatSats(displayAmount)}
               </span>
               <span className="text-muted-foreground ml-2">sats</span>
@@ -415,7 +415,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
             <Separator className="bg-border/50" />
 
             {/* QR Code */}
-            <Card className="border-amber-500/10 bg-white p-3 rounded-2xl shadow-xl shadow-amber-500/5">
+            <Card className="border-border bg-white p-3 rounded-2xl">
               <CardContent className="p-0">
                 {qrCodeUrl ? (
                   <img
@@ -446,7 +446,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
                   variant="outline"
                   size="icon"
                   onClick={handleCopy}
-                  className="shrink-0 border-amber-500/20 hover:bg-amber-500/10"
+                  className="shrink-0 border-border hover:bg-accent/20"
                 >
                   {copied ? (
                     <Check className="h-4 w-4 text-green-500" />
@@ -461,7 +461,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
             <div className="w-full space-y-3">
               <Button
                 onClick={openInWallet}
-                className="w-full rounded-full bg-amber-500 hover:bg-amber-400 text-black font-semibold transition-all duration-300"
+                className="w-full rounded-full bg-[hsl(var(--accent))] hover:bg-[hsl(var(--accent))]/90 text-[hsl(var(--accent-foreground))] font-medium transition-colors"
                 size="lg"
               >
                 <ExternalLink className="h-4 w-4 mr-2" />
@@ -475,7 +475,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
                   setQrCodeUrl('');
                   setCopied(false);
                 }}
-                className="w-full text-muted-foreground hover:text-amber-400"
+                className="w-full text-muted-foreground hover:text-foreground"
                 size="sm"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -499,7 +499,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
                 <ToggleGroupItem
                   key={preset}
                   value={String(preset)}
-                  className="flex flex-col h-auto min-w-0 text-xs px-1 py-3 data-[state=on]:bg-amber-500/15 data-[state=on]:text-amber-400 data-[state=on]:border-amber-500/30 hover:bg-amber-500/10 hover:text-amber-400 transition-all duration-200"
+                  className="flex flex-col h-auto min-w-0 text-xs px-1 py-3 border border-border data-[state=on]:bg-[hsl(var(--accent))]/10 data-[state=on]:text-[hsl(var(--accent))] data-[state=on]:border-[hsl(var(--accent))]/40 hover:bg-muted/60 transition-colors"
                 >
                   <Icon className="h-4 w-4 mb-1.5" />
                   <span className="font-medium">{label}</span>
@@ -525,7 +525,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
                 placeholder="Enter amount in sats"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="border-amber-500/10 focus:border-amber-500/30"
+                className="border-border focus:border-[hsl(var(--accent))]/40"
               />
             </div>
 
@@ -539,7 +539,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
                 placeholder="Add a message..."
                 value={memo}
                 onChange={(e) => setMemo(e.target.value)}
-                className="resize-none border-amber-500/10 focus:border-amber-500/30"
+                className="resize-none border-border focus:border-[hsl(var(--accent))]/40"
                 rows={2}
               />
             </div>
@@ -555,7 +555,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
                   placeholder="you@example.com"
                   value={supporterNip05}
                   onChange={(e) => setSupporterNip05(e.target.value)}
-                  className={`border-amber-500/10 focus:border-amber-500/30 text-xs pr-8 ${
+                  className={`border-border focus:border-[hsl(var(--accent))]/40 text-xs pr-8 ${
                     nip05Status === 'valid' ? 'border-green-500/50' :
                     nip05Status === 'invalid' ? 'border-red-500/50' : ''
                   }`}
@@ -584,7 +584,7 @@ export function DonateDialog({ children, className }: DonateDialogProps) {
             <Button
               onClick={handleGenerateInvoice}
               disabled={isLoading || !displayAmount}
-              className="w-full rounded-full bg-amber-500 hover:bg-amber-400 text-black font-semibold glow-amber transition-all duration-300 hover:scale-[1.02]"
+              className="w-full rounded-full bg-[hsl(var(--accent))] hover:bg-[hsl(var(--accent))]/90 text-[hsl(var(--accent-foreground))] font-medium transition-colors"
               size="lg"
             >
               {isLoading ? (
