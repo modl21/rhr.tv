@@ -261,7 +261,7 @@ function ActiveBetCard({ bet }: { bet: Bet }) {
                 <span className={urgency}>{timeRemaining}</span>
               </span>
               <span className="tabular-nums">
-                {bet.amount}
+                <span className="font-bold text-[hsl(var(--accent))]">{bet.amount}</span>
                 {bet.oddsHolder ? (
                   <>
                     {' · '}
@@ -316,7 +316,7 @@ function SettledBetRow({ bet }: { bet: Bet }) {
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-x-2">
           <h3 className="text-sm font-medium text-foreground/90">{bet.title}</h3>
-          <span className="text-[11px] tabular-nums text-muted-foreground/60">
+          <span className="text-[11px] font-bold tabular-nums text-[hsl(var(--accent))]">
             {bet.amount}
           </span>
         </div>
@@ -347,7 +347,7 @@ function GuestBetRow({ bet }: { bet: GuestBet }) {
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-x-2">
           <h3 className="text-sm font-medium text-foreground/90">{bet.title}</h3>
-          <span className="text-[11px] tabular-nums text-muted-foreground/60">
+          <span className="text-[11px] font-bold tabular-nums text-[hsl(var(--accent))]">
             {bet.amount}
           </span>
         </div>
@@ -459,8 +459,8 @@ export function BetTracker() {
             <div className="serif mb-1 text-3xl font-normal tabular-nums text-foreground">
               {odellWins}
             </div>
-            <div className="text-[11px] text-muted-foreground tabular-nums">
-              {formatSats(odellSatsWon)} sats won
+            <div className="text-[11px] tabular-nums text-muted-foreground">
+              <span className="font-bold text-[hsl(var(--accent))]">{formatSats(odellSatsWon)}</span> sats won
             </div>
           </div>
           <div className="bg-card p-5 text-center">
@@ -470,8 +470,8 @@ export function BetTracker() {
             <div className="serif mb-1 text-3xl font-normal tabular-nums text-foreground">
               {martyWins}
             </div>
-            <div className="text-[11px] text-muted-foreground tabular-nums">
-              {formatSats(martySatsWon)} sats won
+            <div className="text-[11px] tabular-nums text-muted-foreground">
+              <span className="font-bold text-[hsl(var(--accent))]">{formatSats(martySatsWon)}</span> sats won
             </div>
           </div>
         </div>
@@ -485,7 +485,7 @@ export function BetTracker() {
 
         {/* Total stake */}
         <div className="mt-6 text-center text-xs text-muted-foreground">
-          <span className="tabular-nums text-foreground/80">200k</span> sats at stake
+          <span className="font-bold tabular-nums text-[hsl(var(--accent))]">200k</span> sats at stake
         </div>
 
         {/* Settled bets */}
