@@ -99,7 +99,7 @@ function HeroSection() {
           <Button
             asChild
             size="lg"
-            className="h-11 w-full rounded-full border border-sky-300 bg-sky-300 px-7 text-sm font-medium text-[hsl(var(--accent))] transition-colors hover:bg-sky-200 hover:text-[hsl(var(--accent))] sm:w-auto"
+            className="h-11 w-full rounded-full border border-white bg-white px-7 text-sm font-bold text-[hsl(var(--accent))] transition-colors hover:bg-white/90 hover:text-[hsl(var(--accent))] sm:w-auto"
           >
             <a href={LINKS.podcast} target="_blank" rel="noopener noreferrer">
               <Podcast className="mr-2 h-4 w-4" strokeWidth={1.75} />
