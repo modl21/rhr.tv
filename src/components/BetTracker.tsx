@@ -224,16 +224,12 @@ function getUrgencyClass(deadline: Date): string {
 }
 
 function ActiveBetCard({ bet }: { bet: Bet }) {
-  const [expanded, setExpanded] = useState(false);
   const Icon = bet.icon;
   const timeRemaining = getTimeRemaining(bet.deadlineDate);
   const urgency = getUrgencyClass(bet.deadlineDate);
 
   return (
-    <Card
-      className="group cursor-pointer overflow-hidden border-border bg-card/40 transition-colors duration-300 hover:border-border/80 hover:bg-card/70"
-      onClick={() => setExpanded(!expanded)}
-    >
+    <Card className="group overflow-hidden border-border bg-card/40 transition-colors duration-300 hover:border-border/80 hover:bg-card/70">
       <CardContent className="p-5 sm:p-6">
         <div className="flex items-start gap-4">
           {/* Icon */}
@@ -245,16 +241,9 @@ function ActiveBetCard({ bet }: { bet: Bet }) {
 
           {/* Content */}
           <div className="min-w-0 flex-1">
-            <div className="mb-1 flex items-start justify-between gap-3">
-              <h3 className="serif text-base font-medium leading-snug text-foreground sm:text-lg">
-                {bet.title}
-              </h3>
-              {expanded ? (
-                <ChevronUp className="mt-1 h-4 w-4 flex-shrink-0 text-muted-foreground/60" strokeWidth={1.5} />
-              ) : (
-                <ChevronDown className="mt-1 h-4 w-4 flex-shrink-0 text-muted-foreground/60" strokeWidth={1.5} />
-              )}
-            </div>
+            <h3 className="serif mb-1 text-base font-medium leading-snug text-foreground sm:text-lg">
+              {bet.title}
+            </h3>
 
             <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
               {bet.description}
@@ -287,34 +276,29 @@ function ActiveBetCard({ bet }: { bet: Bet }) {
           </div>
         </div>
 
-        {/* Expanded details */}
-        {expanded && (
-          <div
-            className="animate-fade-in-up mt-5 grid grid-cols-1 gap-3 border-t border-border/60 pt-5 text-xs sm:grid-cols-3"
-            style={{ animationDuration: '0.3s' }}
-          >
-            <div>
-              <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                Deadline
-              </div>
-              <div className="text-foreground/90">{bet.deadline}</div>
+        {/* Always-visible details */}
+        <div className="mt-5 grid grid-cols-1 gap-3 border-t border-border/60 pt-5 text-xs sm:grid-cols-3">
+          <div>
+            <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/60">
+              Deadline
             </div>
-            <div>
-              <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                Odds
-              </div>
-              <div className="text-foreground/90">
-                {bet.oddsHolder ? `${bet.odds} for ${bet.oddsHolder}` : 'Even'}
-              </div>
+            <div className="text-foreground/90">{bet.deadline}</div>
+          </div>
+          <div>
+            <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/60">
+              Odds
             </div>
-            <div>
-              <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                Payout
-              </div>
-              <div className="text-foreground/90">{bet.oddsExplainer}</div>
+            <div className="text-foreground/90">
+              {bet.oddsHolder ? `${bet.odds} for ${bet.oddsHolder}` : 'Even'}
             </div>
           </div>
-        )}
+          <div>
+            <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/60">
+              Payout
+            </div>
+            <div className="text-foreground/90">{bet.oddsExplainer}</div>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

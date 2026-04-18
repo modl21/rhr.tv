@@ -99,8 +99,7 @@ function HeroSection() {
           <Button
             asChild
             size="lg"
-            variant="outline"
-            className="h-11 w-full rounded-full border-border bg-transparent px-7 text-sm font-medium text-foreground transition-colors hover:bg-card hover:text-foreground sm:w-auto"
+            className="h-11 w-full rounded-full border border-sky-300 bg-sky-300 px-7 text-sm font-medium text-[hsl(var(--accent))] transition-colors hover:bg-sky-200 hover:text-[hsl(var(--accent))] sm:w-auto"
           >
             <a href={LINKS.podcast} target="_blank" rel="noopener noreferrer">
               <Podcast className="mr-2 h-4 w-4" strokeWidth={1.75} />
@@ -122,7 +121,7 @@ function HeroSection() {
 
 function QuickLinks() {
   const links = [
-    { label: 'Nostr', href: LINKS.nostrFeed, icon: Radio },
+    { label: 'Nostr', href: LINKS.nostrFeed, icon: Radio, gold: true },
     { label: 'Twitch', href: LINKS.twitch, icon: MonitorPlay },
     { label: 'YouTube', href: LINKS.youtube, icon: Video },
   ];
@@ -135,10 +134,18 @@ function QuickLinks() {
           href={link.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="group inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-4 py-2 text-xs font-medium text-muted-foreground transition-all duration-200 hover:border-border/80 hover:bg-card hover:text-foreground"
+          className={
+            link.gold
+              ? "group inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent))] bg-[hsl(var(--accent))] px-4 py-2 text-xs font-medium text-[hsl(var(--accent-foreground))] transition-all duration-200 hover:bg-[hsl(var(--accent))]/90"
+              : "group inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-4 py-2 text-xs font-medium text-muted-foreground transition-all duration-200 hover:border-border/80 hover:bg-card hover:text-foreground"
+          }
         >
           <link.icon
-            className="h-3.5 w-3.5 text-muted-foreground/60 transition-colors group-hover:text-[hsl(var(--accent))]"
+            className={
+              link.gold
+                ? "h-3.5 w-3.5 text-[hsl(var(--accent-foreground))]"
+                : "h-3.5 w-3.5 text-muted-foreground/60 transition-colors group-hover:text-[hsl(var(--accent))]"
+            }
             strokeWidth={1.75}
           />
           {link.label}
