@@ -76,13 +76,13 @@ function HeroSection() {
         </p>
 
         {/* Streak badge */}
-        <div className="animate-fade-in-up animation-delay-400 mb-10 inline-flex items-center gap-2 rounded-none border border-border bg-card/60 px-3.5 py-1.5 text-xs tracking-wide text-muted-foreground backdrop-blur">
+        <div className="animate-fade-in-up animation-delay-400 mb-10 inline-flex items-center gap-2 rounded-none border border-[hsl(var(--accent))]/50 bg-card/60 px-3.5 py-1.5 text-xs tracking-wide text-[hsl(var(--accent))] backdrop-blur">
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[hsl(var(--accent))] opacity-60" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent))]" />
           </span>
-          <span className="tabular-nums">{weeks}</span>
-          <span className="text-muted-foreground/70">weeks in a row</span>
+          <span className="font-bold tabular-nums">{weeks}</span>
+          <span>weeks in a row</span>
         </div>
 
         {/* Primary actions */}
