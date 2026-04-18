@@ -90,7 +90,7 @@ function HeroSection() {
           <DonateDialog>
             <Button
               size="lg"
-              className="h-11 w-full rounded-none bg-[hsl(var(--accent))] px-7 text-sm font-medium text-[hsl(var(--accent-foreground))] transition-colors hover:bg-[hsl(var(--accent))]/90 sm:w-auto"
+              className="h-11 w-auto rounded-none bg-[hsl(var(--accent))] px-7 text-sm font-medium text-[hsl(var(--accent-foreground))] transition-colors hover:bg-[hsl(var(--accent))]/90"
             >
               <Bitcoin className="mr-2 h-4 w-4" strokeWidth={1.75} />
               Support with Bitcoin
@@ -99,7 +99,7 @@ function HeroSection() {
           <Button
             asChild
             size="lg"
-            className="h-11 w-full rounded-none border border-white bg-white px-7 text-sm font-medium text-black transition-colors hover:bg-white/90 hover:text-black sm:w-auto"
+            className="h-11 w-auto rounded-none border border-white bg-white px-7 text-sm font-medium text-black transition-colors hover:bg-white/90 hover:text-black"
           >
             <a href={LINKS.podcast} target="_blank" rel="noopener noreferrer">
               <Podcast className="mr-2 h-4 w-4" strokeWidth={1.75} />
