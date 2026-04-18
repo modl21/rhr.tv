@@ -90,7 +90,7 @@ function HeroSection() {
           <DonateDialog>
             <Button
               size="lg"
-              className="h-11 w-full rounded-full bg-[hsl(var(--accent))] px-7 text-sm font-medium text-[hsl(var(--accent-foreground))] transition-colors hover:bg-[hsl(var(--accent))]/90 sm:w-auto"
+              className="h-11 w-full rounded-none bg-[hsl(var(--accent))] px-7 text-sm font-medium text-[hsl(var(--accent-foreground))] transition-colors hover:bg-[hsl(var(--accent))]/90 sm:w-auto"
             >
               <Bitcoin className="mr-2 h-4 w-4" strokeWidth={1.75} />
               Support with Bitcoin
@@ -99,7 +99,7 @@ function HeroSection() {
           <Button
             asChild
             size="lg"
-            className="h-11 w-full rounded-full border border-white bg-white px-7 text-sm font-medium text-black transition-colors hover:bg-white/90 hover:text-black sm:w-auto"
+            className="h-11 w-full rounded-none border border-white bg-white px-7 text-sm font-medium text-black transition-colors hover:bg-white/90 hover:text-black sm:w-auto"
           >
             <a href={LINKS.podcast} target="_blank" rel="noopener noreferrer">
               <Podcast className="mr-2 h-4 w-4" strokeWidth={1.75} />
@@ -136,8 +136,8 @@ function QuickLinks() {
           rel="noopener noreferrer"
           className={
             link.gold
-              ? "group inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent))] bg-[hsl(var(--accent))] px-4 py-2 text-xs font-medium text-[hsl(var(--accent-foreground))] transition-all duration-200 hover:bg-[hsl(var(--accent))]/90"
-              : "group inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-4 py-2 text-xs font-medium text-muted-foreground transition-all duration-200 hover:border-border/80 hover:bg-card hover:text-foreground"
+              ? "group inline-flex items-center gap-2 rounded-none border border-[hsl(var(--accent))] bg-[hsl(var(--accent))] px-4 py-2 text-xs font-medium text-[hsl(var(--accent-foreground))] transition-all duration-200 hover:bg-[hsl(var(--accent))]/90"
+              : "group inline-flex items-center gap-2 rounded-none border border-border bg-card/40 px-4 py-2 text-xs font-medium text-muted-foreground transition-all duration-200 hover:border-border/80 hover:bg-card hover:text-foreground"
           }
         >
           <link.icon
