@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
   Flame,
   Target,
   Clock,
@@ -479,12 +484,25 @@ export function BetTracker() {
             </div>
             <div className="serif mb-1 text-3xl font-normal tabular-nums text-foreground">
               {martyWins}
-              <span
-                className="ml-0.5 align-super text-base text-[hsl(var(--accent))]"
-                title="Asterisk"
-              >
-                *
-              </span>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label="Why the asterisk?"
+                    className="ml-0.5 cursor-pointer align-super text-base text-[hsl(var(--accent))] transition-colors hover:text-[hsl(var(--accent))]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))]"
+                  >
+                    *
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent
+                  side="top"
+                  align="center"
+                  className="max-w-[240px] rounded-none border-border bg-card p-3 text-left text-xs leading-relaxed text-muted-foreground"
+                >
+                  <span className="font-medium text-foreground">Iran ceasefire wash.</span>{' '}
+                  The terms of that bet weren't clear enough, so it was called off — no payout, no credit either way.
+                </PopoverContent>
+              </Popover>
             </div>
             <div className="text-[11px] tabular-nums text-muted-foreground">
               <span className="font-bold text-[hsl(var(--accent))]">{formatSats(martySatsWon)}</span> sats won
