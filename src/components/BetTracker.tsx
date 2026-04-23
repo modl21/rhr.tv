@@ -32,7 +32,7 @@ interface Bet {
   deadline: string;
   deadlineDate: Date;
   status: 'active' | 'settled';
-  winner?: 'ODELL' | 'Marty';
+  winner?: 'ODELL' | 'Marty' | 'wash';
   /** Sats collected by the winner (for settled bets) */
   satsWon?: number;
   icon: typeof Flame;
@@ -49,16 +49,18 @@ const BETS: Bet[] = [
   {
     id: 'iran-ceasefire',
     title: 'Iran Ceasefire',
-    description: '5 days of ceasefire in Iran by April 21',
+    description: '5 days of ceasefire in Iran by April 21 — called a wash, terms were not clear enough',
     proposedBy: 'Marty',
     against: 'ODELL',
     amount: '100,000 sats',
     odds: '2:1',
     oddsHolder: 'Marty',
-    oddsExplainer: 'Marty wins 200k if ceasefire happens, loses 100k if not',
+    oddsExplainer: 'No payout — bet called off',
     deadline: 'April 21, 2026 23:59 UTC',
     deadlineDate: new Date('2026-04-21T23:59:00Z'),
-    status: 'active',
+    status: 'settled',
+    winner: 'wash',
+    satsWon: 0,
     icon: Target,
   },
   {
@@ -326,8 +328,16 @@ function SettledBetRow({ bet }: { bet: Bet }) {
       </div>
 
       <div className="flex flex-shrink-0 items-center gap-1.5 text-xs">
-        <Trophy className="h-3 w-3 text-[hsl(var(--accent))]/70" strokeWidth={1.75} />
-        <span className="font-medium text-foreground/90">{bet.winner}</span>
+        {bet.winner === 'wash' ? (
+          <span className="rounded-sm border border-border bg-muted/50 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+            Wash
+          </span>
+        ) : (
+          <>
+            <Trophy className="h-3 w-3 text-[hsl(var(--accent))]/70" strokeWidth={1.75} />
+            <span className="font-medium text-foreground/90">{bet.winner}</span>
+          </>
+        )}
       </div>
     </div>
   );
