@@ -479,6 +479,12 @@ export function BetTracker() {
             </div>
             <div className="serif mb-1 text-3xl font-normal tabular-nums text-foreground">
               {martyWins}
+              <span
+                className="ml-0.5 align-super text-base text-[hsl(var(--accent))]"
+                title="Asterisk"
+              >
+                *
+              </span>
             </div>
             <div className="text-[11px] tabular-nums text-muted-foreground">
               <span className="font-bold text-[hsl(var(--accent))]">{formatSats(martySatsWon)}</span> sats won
