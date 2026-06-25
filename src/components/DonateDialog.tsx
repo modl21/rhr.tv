@@ -34,7 +34,7 @@ import { useToast } from '@/hooks/useToast';
 import QRCode from 'qrcode';
 
 const LIGHTNING_ADDRESS = 'rhr@primal.net';
-const RECIPIENT_PUBKEY = 'f81611363554b64306467234d7396ec88455707633f54738f6c4683535098cd3';
+const RECIPIENT_PUBKEY = '7f177706ad6e0aea75a9e3345d9ffdae67676faff249be657b596375e1ced391';
 
 async function resolveNip05(nip05: string): Promise<string> {
   const trimmed = nip05.trim().toLowerCase();
