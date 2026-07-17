@@ -26,6 +26,7 @@ function HeroSection() {
   const weeks = Math.floor(
     (Date.now() - new Date('2018-08-27').getTime()) / (7 * 24 * 60 * 60 * 1000)
   );
+  const years = (weeks / 52.1775).toFixed(1);
 
   return (
     <section className="relative flex flex-col items-center justify-center px-6 py-20 sm:py-28 lg:py-32">
@@ -81,8 +82,10 @@ function HeroSection() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[hsl(var(--accent))] opacity-60" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent))]" />
           </span>
-          <span className="font-bold tabular-nums">{weeks}</span>
-          <span>weeks in a row</span>
+          <div className="flex flex-col items-start leading-tight">
+            <span><span className="font-bold tabular-nums">{weeks}</span> weeks in a row</span>
+            <span className="text-[10px] text-[hsl(var(--accent))]/70"><span className="font-bold tabular-nums">{years}</span> years</span>
+          </div>
         </div>
 
         {/* Primary actions */}
