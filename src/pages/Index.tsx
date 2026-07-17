@@ -82,7 +82,7 @@ function HeroSection() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[hsl(var(--accent))] opacity-60" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent))]" />
           </span>
-          <div className="flex flex-col items-start leading-tight">
+          <div className="flex flex-col items-center leading-tight">
             <span><span className="font-bold tabular-nums">{weeks}</span> weeks in a row</span>
             <span className="text-[10px] text-[hsl(var(--accent))]/70"><span className="font-bold tabular-nums">{years}</span> years</span>
           </div>
